@@ -1,5 +1,4 @@
-import javax.management.DescriptorAccess;
-import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Master {
@@ -39,7 +38,6 @@ public class Master {
         commonArgs = new String[commonArgsNumber];
         for (int i = 0; i < commonArgsNumber; i++){
             commonArgs[i] = inputScanner.nextLine();
-            System.out.println("Hello");
         }
     }
 
@@ -76,18 +74,10 @@ public class Master {
     private static void input() {
         inputScanner = new Scanner(System.in);
 
-        System.out.println("start input args");
-
         inputArgs();
-
-        System.out.println("end input args");
-
-        System.out.println("start input 2 numbers");
 
         masterPort = Long.parseLong(inputScanner.nextLine());
         numberOfWorkers = Long.parseLong(inputScanner.nextLine());
-
-        System.out.println("end input 2 numbers");
 
         Scheduling scheduling = Scheduling.valueOf(inputScanner.nextLine());
 
@@ -98,18 +88,18 @@ public class Master {
 
         storagePort = Long.parseLong(inputScanner.nextLine());
 
-        System.out.println("start input storage");
-
         inputStorageData();
-
-        System.out.println("end input storage");
-
-        System.out.println("start input tasks");
 
         taskNumber = Integer.parseInt(inputScanner.nextLine());
 
         inputTasks();
 
-        System.out.println("end input tasks");
+        System.out.println(scheduling);
+        System.out.println(deadlock);
+        System.out.println(taskNumber);
+        System.out.println(interruptInterval);
+        System.out.println(Arrays.toString(storageData));
+        System.out.println(Arrays.deepToString(taskSleep));
+        System.out.println(Arrays.deepToString(taskIndex));
     }
 }
