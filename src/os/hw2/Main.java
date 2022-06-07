@@ -1,19 +1,23 @@
-import java.util.Arrays;
+package os.hw2;
+
+import os.hw2.util.Logger;
+
 import java.util.Scanner;
 
-public class Master {
+public class Main {
     private static Scanner inputScanner;
 
-    private static int commonArgsNumber;
-    private static String[] commonArgs;
+    public static int commonArgsNumber;
+    public static String[] commonArgs;
 
-    private static long masterPort, storagePort, numberOfWorkers, interruptInterval;
-    private static Scheduling scheduling;
-    private static Deadlock deadlock;
+    public static int masterPort, storagePort;
+    public static long numberOfWorkers, interruptInterval;
+    public static Scheduling scheduling;
+    public static Deadlock deadlock;
 
-    private static int storageLength, taskNumber;
-    private static long[] storageData;
-    private static long[][] taskSleep, taskIndex;
+    public static int storageLength, taskNumber;
+    public static long[] storageData;
+    public static long[][] taskSleep, taskIndex;
 
     public static enum Scheduling {
         FCFS,
@@ -27,9 +31,22 @@ public class Master {
         NONE
     }
 
+    public static String getStorageDataString(){
+        String res = "";
+        for (long data: storageData){
+            res += data;
+            res += " ";
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
+        Logger.processName = "Master";
+        Logger.getInstance().log("Master Started");
+
         input();
 
+        new Master().start();
     }
 
     private static void inputArgs(){
@@ -76,7 +93,7 @@ public class Master {
 
         inputArgs();
 
-        masterPort = Long.parseLong(inputScanner.nextLine());
+        masterPort = Integer.parseInt(inputScanner.nextLine());
         numberOfWorkers = Long.parseLong(inputScanner.nextLine());
 
         Scheduling scheduling = Scheduling.valueOf(inputScanner.nextLine());
@@ -86,7 +103,7 @@ public class Master {
 
         Deadlock deadlock = Deadlock.valueOf(inputScanner.nextLine());
 
-        storagePort = Long.parseLong(inputScanner.nextLine());
+        storagePort = Integer.parseInt(inputScanner.nextLine());
 
         inputStorageData();
 
@@ -94,12 +111,12 @@ public class Master {
 
         inputTasks();
 
-        System.out.println(scheduling);
-        System.out.println(deadlock);
-        System.out.println(taskNumber);
-        System.out.println(interruptInterval);
-        System.out.println(Arrays.toString(storageData));
-        System.out.println(Arrays.deepToString(taskSleep));
-        System.out.println(Arrays.deepToString(taskIndex));
+//        System.out.println(scheduling);
+//        System.out.println(deadlock);
+//        System.out.println(taskNumber);
+//        System.out.println(interruptInterval);
+//        System.out.println(Arrays.toString(storageData));
+//        System.out.println(Arrays.deepToString(taskSleep));
+//        System.out.println(Arrays.deepToString(taskIndex));
     }
 }
