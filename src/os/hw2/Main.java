@@ -10,7 +10,7 @@ public class Main {
     public static int commonArgsNumber;
     public static String[] commonArgs;
 
-    public static int masterPort, storagePort;
+    public static int masterPort, storagePort, firstWorkerPort = 12345;
     public static long numberOfWorkers, interruptInterval;
     public static Scheduling scheduling;
     public static Deadlock deadlock;
@@ -42,11 +42,11 @@ public class Main {
 
     public static void main(String[] args) {
         Logger.processName = "Master";
-        Logger.getInstance().log("Master Started");
+        Logger.getInstance().log("Process start");
 
         input();
 
-        new Master().start();
+        new Master(Main.masterPort).start();
     }
 
     private static void inputArgs(){
@@ -110,13 +110,5 @@ public class Main {
         taskNumber = Integer.parseInt(inputScanner.nextLine());
 
         inputTasks();
-
-//        System.out.println(scheduling);
-//        System.out.println(deadlock);
-//        System.out.println(taskNumber);
-//        System.out.println(interruptInterval);
-//        System.out.println(Arrays.toString(storageData));
-//        System.out.println(Arrays.deepToString(taskSleep));
-//        System.out.println(Arrays.deepToString(taskIndex));
     }
 }

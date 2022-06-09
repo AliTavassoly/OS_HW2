@@ -40,7 +40,7 @@ public class Storage {
 
     public static void main(String[] args) {
         Logger.processName = "Storage";
-        Logger.getInstance().log("Storage Process Started");
+        logCreation();
 
         int port = Integer.parseInt(args[0]);
 
@@ -48,4 +48,8 @@ public class Storage {
         storage.start();
     }
 
+    public static void logCreation(){
+        long pid = ProcessHandle.current().pid();
+        Logger.getInstance().log("Process start, PID: " + pid);
+    }
 }

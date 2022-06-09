@@ -13,53 +13,22 @@ import java.util.Scanner;
 public class Master {
     private int masterPort;
 
-    private Process storageProcess;
-    private Socket storageSocket;
-    private PrintStream storagePrintStream;
-    private Scanner storageScanner;
+    private StorageHandler storageHandler;
 
     private List<WorkerHandler> workerHandlers;
 
-    public Master(){
+    public Master(int masterPort){
+        this.masterPort = masterPort;
         workerHandlers = new LinkedList<>();
     }
 
-    private void createWorkers(){
-        Logger.getInstance().log("Master is Creating workers...");
-
-        for (int i = 0; i < Main.numberOfWorkers; i++){
-            workerHandlers.add(new WorkerHandler());
-        }
-    }
-
-    private void createStorageProcess() {
-        try {
-            Process process = new ProcessBuilder(
-                    Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3],
-                            Main.commonArgs[4], "os.hw2.Storage", String.valueOf(Main.storagePort)
-            ).start();
-
-            storageProcess = process;
-
-            Logger.getInstance().log("Storage process created, PID: " + process.pid() + ", Port: " + Main.storagePort);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void connectToStorage() {
-        try {
-            createStorageProcess();
+        storageHandler = new StorageHandler(Main.storagePort);
+    }
 
-            // Wait until process creation
-            Thread.sleep(100);
-
-            storageSocket = new Socket(InetAddress.getLocalHost(), Main.storagePort);
-
-            storagePrintStream = new PrintStream(storageSocket.getOutputStream());
-            storageScanner = new Scanner(storageSocket.getInputStream());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+    private void connectToWorkers() {
+        for (int i = 0; i < Main.numberOfWorkers; i++){
+            workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i));
         }
     }
 
@@ -69,8 +38,9 @@ public class Master {
 
     public void start(){
         connectToStorage();
+
         initializeStorage();
 
-        // createWorkers();
+        connectToWorkers();
     }
 }
