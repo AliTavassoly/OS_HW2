@@ -1,5 +1,6 @@
 package os.hw2;
 
+import os.hw2.master.Master;
 import os.hw2.util.Logger;
 
 import java.util.Scanner;

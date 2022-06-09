@@ -1,14 +1,9 @@
-package os.hw2;
+package os.hw2.master;
 
-import os.hw2.util.Logger;
+import os.hw2.Main;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Master {
     private int masterPort;

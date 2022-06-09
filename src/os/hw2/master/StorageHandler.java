@@ -1,5 +1,6 @@
-package os.hw2;
+package os.hw2.master;
 
+import os.hw2.Main;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class StorageHandler {
         try {
             Process process = new ProcessBuilder(
                     Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3],
-                    Main.commonArgs[4], "os.hw2.Storage", String.valueOf(storagePort)
+                    Main.commonArgs[4], "os.hw2.storage.Storage", String.valueOf(storagePort)
             ).start();
 
             Logger.getInstance().log("Storage process created, PID: " + process.pid() + ", Port: " + storagePort);

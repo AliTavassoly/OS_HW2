@@ -1,4 +1,4 @@
-package os.hw2;
+package os.hw2.worker;
 
 import os.hw2.util.Logger;
 
@@ -6,50 +6,45 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Storage {
-    private int storagePort;
+public class Worker {
+    private int workerPort;
 
     private ServerSocket serverSocket;
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
-    private ArrayList memory;
-
-    public Storage(int storagePort) {
-        this.storagePort = storagePort;
-        memory = new ArrayList();
+    public Worker(int workerPort) {
+        this.workerPort = workerPort;
     }
 
     public void start(){
         try {
-            serverSocket = new ServerSocket(storagePort);
+            serverSocket = new ServerSocket(workerPort);
 
             Socket socket = serverSocket.accept();
             masterPrintStream = new PrintStream(socket.getOutputStream());
             masterScanner = new Scanner(socket.getInputStream());
 
-            Logger.getInstance().log("Master connected to Storage");
+            Logger.getInstance().log("Master connected to Worker");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static void logCreation(){
+        long pid = ProcessHandle.current().pid();
+        Logger.getInstance().log("Process start, PID: " + pid);
+    }
+
     public static void main(String[] args) {
-        Logger.processName = "Storage";
+        Logger.processName = "Worker";
         logCreation();
 
         int port = Integer.parseInt(args[0]);
 
-        Storage storage = new Storage(port);
-        storage.start();
-    }
-
-    public static void logCreation(){
-        long pid = ProcessHandle.current().pid();
-        Logger.getInstance().log("Process start, PID: " + pid);
+        Worker worker = new Worker(port);
+        worker.start();
     }
 }
