@@ -29,10 +29,14 @@ public class WorkerHandler {
         this.workerPort = workerPort;
         this.id = workerPort - Main.firstWorkerPort;
 
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
+        createGson();
 
         connectToWorker();
+    }
+
+    private void createGson(){
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
     }
 
     private void createWorkerProcess() {

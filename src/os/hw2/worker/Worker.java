@@ -1,5 +1,8 @@
 package os.hw2.worker;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import os.hw2.Message;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -20,6 +23,9 @@ public class Worker {
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
+    private GsonBuilder gsonBuilder;
+    private Gson gson;
+
     private int id;
 
     private Integer valueLookingFor = null;
@@ -29,7 +35,14 @@ public class Worker {
         this.storagePort = storagePort;
         this.id = id;
 
+        createGson();
+
         logCreation();
+    }
+
+    private void createGson() {
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
     }
 
     public void start(){
@@ -43,9 +56,47 @@ public class Worker {
             Logger.getInstance().log("Master connected to Worker");
 
             connectToStorage();
+
+            listenToMaster();
+
+            listenToStorage();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void listenToMaster() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
+                    newMessageFromMaster(message);
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void listenToStorage() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Message message = gson.fromJson(storageScanner.nextLine(), Message.class);
+                    newMessageFromStorage(message);
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void newMessageFromMaster(Message message) {
+        // TODO
+    }
+
+    private void newMessageFromStorage(Message message) {
+        // TODO
     }
 
     private void sendIDToStorage(){
