@@ -8,12 +8,13 @@ public class Task {
 
     private boolean isCurrentSleep;
 
-    private int sum = 0;
+    private int id, sum = 0;
 
-    public Task(ArrayList<Integer> arrayList) {
+    public Task(ArrayList<Integer> arrayList, int id) {
         this.cells = new ArrayList<>();
         this.sleeps = new ArrayList<>();
         this.isCurrentSleep = true;
+        this.id = id;
 
         int isSleep = 1;
         for (int i = 0; i < arrayList.size(); i++) {
@@ -27,10 +28,11 @@ public class Task {
         }
     }
 
-    public Task(int[] cellsAndSleeps) {
+    public Task(int[] cellsAndSleeps, int id) {
         this.cells = new ArrayList<>();
         this.sleeps = new ArrayList<>();
         this.isCurrentSleep = true;
+        this.id = id;
 
         int isSleep = 1;
         for (int i = 0; i < cellsAndSleeps.length; i++) {
@@ -72,7 +74,11 @@ public class Task {
         return isCurrentSleep;
     }
 
-    int getAns() {
+    public int getAns() {
         return sum;
+    }
+
+    public int getId(){
+        return id;
     }
 }

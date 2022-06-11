@@ -1,6 +1,9 @@
 package os.hw2.master;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import os.hw2.Main;
+import os.hw2.Task;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -17,9 +20,17 @@ public class WorkerHandler {
 
     private int workerPort, id;
 
+    private GsonBuilder gsonBuilder;
+    private Gson gson;
+
+    private boolean isBusy = false;
+
     public WorkerHandler(int workerPort){
         this.workerPort = workerPort;
         this.id = workerPort - Main.firstWorkerPort;
+
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
 
         connectToWorker();
     }
@@ -52,6 +63,21 @@ public class WorkerHandler {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void runTask(Task task) {
+        isBusy = true;
+
+        sendMessageToWorker(gson.toJson(task));
+    }
+
+    private void sendMessageToWorker(String message) {
+        workerPrintStream.println(message);
+        workerPrintStream.flush();
+    }
+
+    public boolean isBusy(){
+        return isBusy;
     }
 
     public int getId(){

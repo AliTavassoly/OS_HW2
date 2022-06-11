@@ -22,6 +22,8 @@ public class Main {
 
     public static String memoryString;
 
+    public static Master master;
+
     public static Task[] tasks;
 
     public static enum Scheduling {
@@ -42,7 +44,8 @@ public class Main {
 
         input();
 
-        new Master(Main.masterPort).start();
+        master = new Master(Main.masterPort);
+        master.start();
     }
 
     private static void inputArgs(){
@@ -78,7 +81,7 @@ public class Main {
                 cellsAndSleeps[i][j] = Integer.parseInt(s[j]);
             }
 
-            tasks[i] = new Task(cellsAndSleeps[i]);
+            tasks[i] = new Task(cellsAndSleeps[i], i);
         }
     }
 
