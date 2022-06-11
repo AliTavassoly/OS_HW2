@@ -1,6 +1,7 @@
 package os.hw2;
 
 import os.hw2.master.Master;
+import os.hw2.master.Task;
 import os.hw2.util.Logger;
 
 import java.util.Scanner;
@@ -12,13 +13,15 @@ public class Main {
     public static String[] commonArgs;
 
     public static int masterPort, storagePort, firstWorkerPort = 12345;
-    public static long numberOfWorkers, interruptInterval;
+    public static int numberOfWorkers, interruptInterval;
     public static Scheduling scheduling;
     public static Deadlock deadlock;
 
     public static int storageLength, taskNumber;
-    public static long[] storageData;
-    public static long[][] taskSleep, taskIndex;
+    public static int[] storageData;
+    public static int[][] cellsAndSleeps;
+
+    public static Task[] tasks;
 
     public static enum Scheduling {
         FCFS,
@@ -34,7 +37,7 @@ public class Main {
 
     public static String getStorageDataString(){
         String res = "";
-        for (long data: storageData){
+        for (int data: storageData){
             res += data;
             res += " ";
         }
@@ -62,30 +65,27 @@ public class Main {
     private static void inputStorageData() {
         String[] listOfData = inputScanner.nextLine().split(" ");
         storageLength = listOfData.length;
-        storageData = new long[storageLength];
+        storageData = new int[storageLength];
 
         for (int i = 0; i < storageLength; i++)
-            storageData[i] = Long.parseLong(listOfData[i]);
+            storageData[i] = Integer.parseInt(listOfData[i]);
     }
 
     private static void inputTasks() {
-        taskIndex = new long[taskNumber][];
-        taskSleep = new long[taskNumber][];
+        cellsAndSleeps = new int[taskNumber][];
+        tasks = new Task[taskNumber];
 
         for (int i = 0; i < taskNumber; i++){
             String[] s = inputScanner.nextLine().split(" ");
 
             int len = s.length;
-            taskSleep[i] = new long[(len + 1) / 2];
-            taskIndex[i] = new long[len / 2];
+            cellsAndSleeps[i] = new int[len];
 
             for (int j = 0; j < len; j++) {
-                if (j % 2 == 0) {
-                    taskSleep[i][j / 2] = Long.parseLong(s[j]);
-                } else {
-                    taskIndex[i][j / 2] = Long.parseLong(s[j]);
-                }
+                cellsAndSleeps[i][j] = Integer.parseInt(s[j]);
             }
+
+            tasks[i] = new Task(cellsAndSleeps[i]);
         }
     }
 
@@ -95,12 +95,12 @@ public class Main {
         inputArgs();
 
         masterPort = Integer.parseInt(inputScanner.nextLine());
-        numberOfWorkers = Long.parseLong(inputScanner.nextLine());
+        numberOfWorkers = Integer.parseInt(inputScanner.nextLine());
 
         Scheduling scheduling = Scheduling.valueOf(inputScanner.nextLine());
 
         if (scheduling == Scheduling.RR)
-            interruptInterval = Long.parseLong(inputScanner.nextLine());
+            interruptInterval = Integer.parseInt(inputScanner.nextLine());
 
         Deadlock deadlock = Deadlock.valueOf(inputScanner.nextLine());
 
