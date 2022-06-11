@@ -25,8 +25,9 @@ public class StorageHandler {
     private void createStorageProcess() {
         try {
             Process process = new ProcessBuilder(
-                    Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3],
-                    Main.commonArgs[4], "os.hw2.storage.Storage", String.valueOf(storagePort)
+                    Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3], Main.commonArgs[4],
+                    "os.hw2.storage.Storage",
+                    String.valueOf(storagePort), String.valueOf(Main.numberOfWorkers)
             ).start();
 
             Logger.getInstance().log("Storage process created, PID: " + process.pid() + ", Port: " + storagePort);

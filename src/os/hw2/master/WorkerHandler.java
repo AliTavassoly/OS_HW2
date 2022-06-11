@@ -26,8 +26,9 @@ public class WorkerHandler {
     private void createWorkerProcess() {
         try {
             Process process = new ProcessBuilder(
-                    Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3],
-                    Main.commonArgs[4], "os.hw2.worker.Worker", String.valueOf(workerPort)
+                    Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3], Main.commonArgs[4],
+                    "os.hw2.worker.Worker",
+                    String.valueOf(workerPort), String.valueOf(Main.storagePort), String.valueOf(workerPort - Main.firstWorkerPort)
             ).start();
 
             Logger.getInstance().log("Worker process created, PID: " + process.pid() + ", Port: " + workerPort);

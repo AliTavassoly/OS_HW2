@@ -24,6 +24,12 @@ public class Master {
     private void connectToWorkers() {
         for (int i = 0; i < Main.numberOfWorkers; i++){
             workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i));
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

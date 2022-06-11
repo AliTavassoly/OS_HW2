@@ -1,5 +1,6 @@
 package os.hw2.storage;
 
+import os.hw2.Main;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -10,16 +11,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private int storagePort;
+    private int storagePort, numberOfWorkers;
 
     private ServerSocket serverSocket;
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
+    private PrintStream[] workerPrintStreams;
+    private Scanner[] workerScanners;
+
     private ArrayList memory;
 
-    public Storage(int storagePort) {
+    public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
+        this.numberOfWorkers = numberOfWorkers;
+
         memory = new ArrayList();
     }
 
@@ -32,9 +38,39 @@ public class Storage {
             masterScanner = new Scanner(socket.getInputStream());
 
             Logger.getInstance().log("Master connected to Storage");
+
+            waitForWorkersToConnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void waitForWorkersToConnect() {
+        Thread waitForWorkersConnectThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Logger.getInstance().log("Start listening for new connections...");
+                for (int i = 0; i < numberOfWorkers; i++){
+                    try {
+                        Logger.getInstance().log("Waiting for new worker...");
+                        Socket socket = serverSocket.accept();
+                        PrintStream printStream = new PrintStream(socket.getOutputStream());
+                        Scanner scanner = new Scanner(socket.getInputStream());
+
+                        int workerID = Integer.parseInt(scanner.nextLine());
+
+                        Logger.getInstance().log("Worker with ID: " + workerID + " connected");
+
+                        workerPrintStreams[workerID] = printStream;
+                        workerScanners[workerID] = scanner;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        waitForWorkersConnectThread.start();
+        Logger.getInstance().log(String.valueOf(numberOfWorkers));
     }
 
     public static void logCreation(){
@@ -47,8 +83,9 @@ public class Storage {
         logCreation();
 
         int port = Integer.parseInt(args[0]);
+        int numberOfWorkers = Integer.parseInt(args[1]);
 
-        Storage storage = new Storage(port);
+        Storage storage = new Storage(port, numberOfWorkers);
         storage.start();
     }
 }
