@@ -48,13 +48,18 @@ public class Worker {
         }
     }
 
+    private void sendIDToStorage(){
+        storagePrintStream.println(id);
+        storagePrintStream.flush();
+    }
+
     private void connectToStorage() {
         try {
-            Logger.getInstance().log("Try to connect to storage " + storagePort);
-
             storageSocket = new Socket(InetAddress.getLocalHost(), storagePort);
             storagePrintStream = new PrintStream(storageSocket.getOutputStream());
             storageScanner = new Scanner(storageSocket.getInputStream());
+
+            sendIDToStorage();
         } catch (IOException e) {
             e.printStackTrace();
         }

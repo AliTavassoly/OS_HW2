@@ -25,6 +25,8 @@ public class Storage {
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
         this.numberOfWorkers = numberOfWorkers;
+        this.workerScanners = new Scanner[numberOfWorkers];
+        this.workerPrintStreams = new PrintStream[numberOfWorkers];
 
         memory = new ArrayList();
     }
@@ -49,10 +51,8 @@ public class Storage {
         Thread waitForWorkersConnectThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Logger.getInstance().log("Start listening for new connections...");
                 for (int i = 0; i < numberOfWorkers; i++){
                     try {
-                        Logger.getInstance().log("Waiting for new worker...");
                         Socket socket = serverSocket.accept();
                         PrintStream printStream = new PrintStream(socket.getOutputStream());
                         Scanner scanner = new Scanner(socket.getInputStream());
@@ -70,7 +70,6 @@ public class Storage {
             }
         });
         waitForWorkersConnectThread.start();
-        Logger.getInstance().log(String.valueOf(numberOfWorkers));
     }
 
     public static void logCreation(){
