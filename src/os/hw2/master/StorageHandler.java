@@ -47,8 +47,15 @@ public class StorageHandler {
 
             storagePrintStream = new PrintStream(storageSocket.getOutputStream());
             storageScanner = new Scanner(storageSocket.getInputStream());
+
+            sendInitialMemory();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendInitialMemory() {
+        storagePrintStream.println(Main.memoryString);
+        storagePrintStream.flush();
     }
 }

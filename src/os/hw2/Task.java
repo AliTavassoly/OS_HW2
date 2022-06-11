@@ -1,4 +1,4 @@
-package os.hw2.master;
+package os.hw2;
 
 import java.util.ArrayList;
 

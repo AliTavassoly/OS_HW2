@@ -1,6 +1,5 @@
 package os.hw2.storage;
 
-import os.hw2.Main;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -20,7 +19,7 @@ public class Storage {
     private PrintStream[] workerPrintStreams;
     private Scanner[] workerScanners;
 
-    private ArrayList memory;
+    private ArrayList<Integer> memory;
 
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
@@ -28,7 +27,7 @@ public class Storage {
         this.workerScanners = new Scanner[numberOfWorkers];
         this.workerPrintStreams = new PrintStream[numberOfWorkers];
 
-        memory = new ArrayList();
+        memory = new ArrayList<>();
     }
 
     public void start(){
@@ -41,10 +40,21 @@ public class Storage {
 
             Logger.getInstance().log("Master connected to Storage");
 
+            initializeMemory(masterScanner.nextLine());
+
             waitForWorkersToConnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeMemory(String memoryString) {
+        String[] listOfData = memoryString.split(" ");
+
+        for (int i = 0; i < listOfData.length; i++)
+            memory.add(Integer.parseInt(listOfData[i]));
+
+        Logger.getInstance().log("Memory initialized with: " + memory);
     }
 
     private void waitForWorkersToConnect() {

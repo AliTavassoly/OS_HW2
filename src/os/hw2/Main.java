@@ -1,7 +1,6 @@
 package os.hw2;
 
 import os.hw2.master.Master;
-import os.hw2.master.Task;
 import os.hw2.util.Logger;
 
 import java.util.Scanner;
@@ -21,6 +20,8 @@ public class Main {
     public static int[] storageData;
     public static int[][] cellsAndSleeps;
 
+    public static String memoryString;
+
     public static Task[] tasks;
 
     public static enum Scheduling {
@@ -33,15 +34,6 @@ public class Main {
         PREVENT,
         DETECT,
         NONE
-    }
-
-    public static String getStorageDataString(){
-        String res = "";
-        for (int data: storageData){
-            res += data;
-            res += " ";
-        }
-        return res;
     }
 
     public static void main(String[] args) {
@@ -63,7 +55,8 @@ public class Main {
     }
 
     private static void inputStorageData() {
-        String[] listOfData = inputScanner.nextLine().split(" ");
+        memoryString = inputScanner.nextLine();
+        String[] listOfData = memoryString.split(" ");
         storageLength = listOfData.length;
         storageData = new int[storageLength];
 

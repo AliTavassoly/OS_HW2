@@ -1,7 +1,9 @@
 package os.hw2.master;
 
 import os.hw2.Main;
+import os.hw2.Task;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,9 +14,19 @@ public class Master {
 
     private List<WorkerHandler> workerHandlers;
 
+    private List<Task> tasks;
+
     public Master(int masterPort){
         this.masterPort = masterPort;
         workerHandlers = new LinkedList<>();
+
+        initializeTasks();
+    }
+
+    private void initializeTasks() {
+        tasks = new ArrayList<>();
+        for (int i = 0; i < Main.taskNumber; i++)
+            tasks.add(Main.tasks[i]);
     }
 
     private void connectToStorage() {
@@ -33,14 +45,8 @@ public class Master {
         }
     }
 
-    private void initializeStorage(){
-        // TODO
-    }
-
     public void start(){
         connectToStorage();
-
-        initializeStorage();
 
         connectToWorkers();
     }

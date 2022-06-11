@@ -15,10 +15,11 @@ public class WorkerHandler {
     private PrintStream workerPrintStream;
     private Scanner workerScanner;
 
-    private int workerPort;
+    private int workerPort, id;
 
     public WorkerHandler(int workerPort){
         this.workerPort = workerPort;
+        this.id = workerPort - Main.firstWorkerPort;
 
         connectToWorker();
     }
@@ -51,5 +52,9 @@ public class WorkerHandler {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getId(){
+        return id;
     }
 }
