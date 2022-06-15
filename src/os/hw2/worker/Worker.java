@@ -37,6 +37,7 @@ public class Worker {
 
         createGson();
 
+
         logCreation();
     }
 
@@ -93,10 +94,12 @@ public class Worker {
 
     private void newMessageFromMaster(Message message) {
         // TODO
+        Logger.getInstance().log("New message from master: " + message.getType());
     }
 
     private void newMessageFromStorage(Message message) {
         // TODO
+        Logger.getInstance().log("New message from storage: " + message.getType());
     }
 
     private void sendIDToStorage(){
@@ -129,6 +132,7 @@ public class Worker {
         int id = Integer.parseInt(args[2]);
 
         Worker worker = new Worker(workerPort, storagePort, id);
+
         worker.start();
     }
 }

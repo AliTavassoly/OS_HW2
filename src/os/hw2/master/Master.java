@@ -1,6 +1,7 @@
 package os.hw2.master;
 
 import os.hw2.Main;
+import os.hw2.Message;
 import os.hw2.Task;
 
 import java.util.ArrayList;

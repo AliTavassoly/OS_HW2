@@ -3,6 +3,7 @@ package os.hw2.master;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import os.hw2.Main;
+import os.hw2.Message;
 import os.hw2.Task;
 import os.hw2.util.Logger;
 
@@ -72,12 +73,8 @@ public class WorkerHandler {
     public void runTask(Task task) {
         isBusy = true;
 
-        sendMessageToWorker(gson.toJson(task));
-    }
-
-    private void sendMessageToWorker(String message) {
-        workerPrintStream.println(message);
-        workerPrintStream.flush();
+        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
+        sendMessage(message);
     }
 
     public boolean isBusy(){
@@ -86,5 +83,10 @@ public class WorkerHandler {
 
     public int getId(){
         return id;
+    }
+
+    public void sendMessage(Message message) {
+        workerPrintStream.println(gson.toJson(message));
+        workerPrintStream.flush();
     }
 }
