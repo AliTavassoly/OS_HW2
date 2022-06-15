@@ -33,6 +33,8 @@ public class WorkerHandler {
         createGson();
 
         connectToWorker();
+
+        startListeningToWorker();
     }
 
     private void createGson(){
@@ -51,6 +53,14 @@ public class WorkerHandler {
             Logger.getInstance().log("Worker process created, PID: " + process.pid() + ", Port: " + workerPort);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void startListeningToWorker() {
+        while (true) {
+            Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
+
+            Logger.getInstance().log("New message from worker: " + message);
         }
     }
 

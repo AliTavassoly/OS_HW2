@@ -18,7 +18,7 @@ public class Master {
 
     private List<Task> tasks;
 
-    private Scheduler scheduler;
+    private int sleepTime;
 
     public Master(int masterPort){
         this.masterPort = masterPort;
@@ -26,7 +26,7 @@ public class Master {
 
         initializeTasks();
 
-        scheduler = new Scheduler(Main.scheduling, Main.deadlock);
+        sleepTime = 1;
     }
 
     private void initializeTasks() {
@@ -55,6 +55,19 @@ public class Master {
         connectToStorage();
 
         connectToWorkers();
+
+        runScheduler();
+    }
+
+    private void runScheduler() {
+        while (true) {
+            try {
+                assignTasks();
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean isThereWorker(){
@@ -63,6 +76,35 @@ public class Master {
                 return true;
         }
         return false;
+    }
+
+    private boolean isThereTask() {
+        return tasks.size() > 0;
+    }
+
+    private void assignTasks() {
+        switch (Main.scheduling) {
+            case FCFS:
+                assignTaskFCFS();
+                break;
+            case SJF:
+                assignTaskSJF();
+                break;
+            case RR:
+                assignTaskRR();
+                break;
+        }
+    }
+
+    private void assignTaskFCFS() {
+        if(isThereTask())
+            assignTask(tasks.get(0).getId());
+    }
+
+    private void assignTaskSJF() {}
+
+    private void assignTaskRR() {
+
     }
 
     private Task removeTask(int taskID) {
@@ -75,7 +117,7 @@ public class Master {
         return null;
     }
 
-    public void assignTask(int taskID) {
+    private void assignTask(int taskID) {
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {

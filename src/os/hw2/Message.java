@@ -4,7 +4,9 @@ public class Message {
     public static enum Type {
         ASSIGN,
         INTERRUPT,
-        TASKBACK
+        REQUEST,
+        TASKBACK,
+        RESULT
     }
 
     public static enum Sender {
@@ -36,4 +38,13 @@ public class Message {
     }
 
     public Sender getSender() { return sender;}
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "type=" + type +
+                ", task=" + task +
+                ", sender=" + sender +
+                '}';
+    }
 }

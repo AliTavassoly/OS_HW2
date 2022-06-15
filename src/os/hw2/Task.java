@@ -6,14 +6,13 @@ public class Task {
     private ArrayList<Integer> cells;
     private ArrayList<Integer> sleeps;
 
-    private boolean isCurrentSleep;
-
     private int id, sum = 0;
+
+    private boolean remainSleep = false;
 
     public Task(ArrayList<Integer> arrayList, int id) {
         this.cells = new ArrayList<>();
         this.sleeps = new ArrayList<>();
-        this.isCurrentSleep = true;
         this.id = id;
 
         int isSleep = 1;
@@ -31,7 +30,6 @@ public class Task {
     public Task(int[] cellsAndSleeps, int id) {
         this.cells = new ArrayList<>();
         this.sleeps = new ArrayList<>();
-        this.isCurrentSleep = true;
         this.id = id;
 
         int isSleep = 1;
@@ -46,32 +44,27 @@ public class Task {
         }
     }
 
-    int getCurrentCell() {
-        return cells.get(0);
-    }
-
-    int getCurrentSleep() {
-        return sleeps.get(0);
-    }
-
-    void removeCurrentCell() {
-        cells.remove(0);
-    }
-
-    void removeCurrentSleep() {
-        sleeps.remove(0);
-    }
-
     public ArrayList getCells() {
         return cells;
     }
 
-    public ArrayList getSleeps() {
-        return sleeps;
+    public void stopSleeping() {
+        if () {
+            doneSleeping();
+        }
     }
 
-    public boolean isCurrentSleep() {
-        return isCurrentSleep;
+    public void doneSleeping() {
+        remainSleep = false;
+    }
+
+    public void startSleeping() {
+        remainSleep = true;
+    }
+
+    public int getCurrentCell() {
+        int tmp = cells.remove(0);
+        return tmp;
     }
 
     public int getAns() {
@@ -81,4 +74,6 @@ public class Task {
     public int getId(){
         return id;
     }
+
+    // TODO: toString function need to be implemented
 }

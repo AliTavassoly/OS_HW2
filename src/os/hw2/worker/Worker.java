@@ -3,6 +3,7 @@ package os.hw2.worker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import os.hw2.Message;
+import os.hw2.Task;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -36,7 +37,6 @@ public class Worker {
         this.id = id;
 
         createGson();
-
 
         logCreation();
     }
@@ -94,7 +94,20 @@ public class Worker {
 
     private void newMessageFromMaster(Message message) {
         // TODO
-        Logger.getInstance().log("New message from master: " + message.getType());
+        Logger.getInstance().log("New message from master: " + message);
+
+        switch (message.getType()) {
+            case REQUEST:
+                break;
+            case ASSIGN:
+                break;
+            case INTERRUPT:
+                break;
+            case TASKBACK:
+                break;
+            case RESULT:
+                break;
+        }
     }
 
     private void newMessageFromStorage(Message message) {
@@ -122,6 +135,10 @@ public class Worker {
     public void logCreation(){
         long pid = ProcessHandle.current().pid();
         Logger.getInstance().log("Process start, PID: " + pid + ", worker ID: " + id);
+    }
+
+    private void runTask(Task task) {
+
     }
 
     public static void main(String[] args) {
