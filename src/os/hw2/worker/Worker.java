@@ -11,88 +11,47 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Worker {
     private int workerPort, storagePort;
 
-    private Socket storageSocket;
-    private PrintStream storagePrintStream;
-    private Scanner storageScanner;
+    private MasterHandler masterHandler;
 
-    private ServerSocket serverSocket;
-    private PrintStream masterPrintStream;
-    private Scanner masterScanner;
-
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
+    private StorageHandler storageHandler;
 
     private int id;
 
     private Integer valueLookingFor = null;
+
+    private Task task;
 
     public Worker(int workerPort, int storagePort, int id) {
         this.workerPort = workerPort;
         this.storagePort = storagePort;
         this.id = id;
 
-        createGson();
-
         logCreation();
     }
 
-    private void createGson() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
-    }
-
     public void start(){
-        try {
-            serverSocket = new ServerSocket(workerPort);
-
-            Socket socket = serverSocket.accept();
-            masterPrintStream = new PrintStream(socket.getOutputStream());
-            masterScanner = new Scanner(socket.getInputStream());
-
-            Logger.getInstance().log("Master connected to Worker");
+            connectToMaster();
 
             connectToStorage();
-
-            listenToMaster();
-
-            listenToStorage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void listenToMaster() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
-                    newMessageFromMaster(message);
-                }
-            }
-        });
-        thread.start();
+    private void connectToStorage() {
+        storageHandler = new StorageHandler(id, storagePort, this);
+        storageHandler.startListening();
     }
 
-    private void listenToStorage() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(storageScanner.nextLine(), Message.class);
-                    newMessageFromStorage(message);
-                }
-            }
-        });
-        thread.start();
+    private void connectToMaster() {
+        masterHandler = new MasterHandler(workerPort, this);
+        masterHandler.startListening();
     }
 
-    private void newMessageFromMaster(Message message) {
+    public void newMessageFromMaster(Message message) {
         // TODO
         Logger.getInstance().log("New message from master: " + message);
 
@@ -100,6 +59,7 @@ public class Worker {
             case REQUEST:
                 break;
             case ASSIGN:
+                runTask(message.getTask());
                 break;
             case INTERRUPT:
                 break;
@@ -110,26 +70,9 @@ public class Worker {
         }
     }
 
-    private void newMessageFromStorage(Message message) {
+    public void newMessageFromStorage(Message message) {
         // TODO
         Logger.getInstance().log("New message from storage: " + message.getType());
-    }
-
-    private void sendIDToStorage(){
-        storagePrintStream.println(id);
-        storagePrintStream.flush();
-    }
-
-    private void connectToStorage() {
-        try {
-            storageSocket = new Socket(InetAddress.getLocalHost(), storagePort);
-            storagePrintStream = new PrintStream(storageSocket.getOutputStream());
-            storageScanner = new Scanner(storageSocket.getInputStream());
-
-            sendIDToStorage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void logCreation(){
@@ -137,7 +80,38 @@ public class Worker {
         Logger.getInstance().log("Process start, PID: " + pid + ", worker ID: " + id);
     }
 
+    private int runSubTask() {
+        long sleepTime = task.startSleep();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (task) {
+                    try {
+                        wait(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                int state = task.stopSleep();
+            }
+        });
+        thread.start();
+        return 0; // TODO: ???
+    }
+
     private void runTask(Task task) {
+        this.task = task;
+        while (true) {
+            int state = runSubTask();
+            if (state == -1 || state == -2) {
+                returnTask();
+            } else {
+
+            }
+        }
+    }
+
+    private void returnTask() {
 
     }
 

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Task {
     private ArrayList<Integer> cells;
-    private ArrayList<Integer> sleeps;
+    private ArrayList<Long> sleeps;
 
     private int id, sum = 0;
 
-    private boolean remainSleep = false;
+    private long lastStartedSleep;
 
     public Task(ArrayList<Integer> arrayList, int id) {
         this.cells = new ArrayList<>();
@@ -18,7 +18,7 @@ public class Task {
         int isSleep = 1;
         for (int i = 0; i < arrayList.size(); i++) {
             if (isSleep == 1) {
-                sleeps.add(arrayList.get(i));
+                sleeps.add((long) arrayList.get(i));
             } else {
                 cells.add(arrayList.get(i));
             }
@@ -35,7 +35,7 @@ public class Task {
         int isSleep = 1;
         for (int i = 0; i < cellsAndSleeps.length; i++) {
             if (isSleep == 1) {
-                sleeps.add(cellsAndSleeps[i]);
+                sleeps.add((long) cellsAndSleeps[i]);
             } else {
                 cells.add(cellsAndSleeps[i]);
             }
@@ -48,18 +48,27 @@ public class Task {
         return cells;
     }
 
-    public void stopSleeping() {
-        if () {
-            doneSleeping();
+    public Integer stopSleep() {
+        long sleepTime = calculateSleepTime();
+        if (sleepTime > sleeps.get(0)) {
+            sleeps.remove(0);
+            if (cells.size() == 0)
+                return -2;
+            return cells.get(0);
+        } else {
+            sleeps.set(0, sleeps.get(0) - sleepTime);
+            return -1;
         }
     }
 
-    public void doneSleeping() {
-        remainSleep = false;
+    public long startSleep() {
+        lastStartedSleep = System.currentTimeMillis();
+        return sleeps.get(0);
     }
 
-    public void startSleeping() {
-        remainSleep = true;
+    private long calculateSleepTime() {
+        long currentTime = System.currentTimeMillis();
+        return currentTime - lastStartedSleep;
     }
 
     public int getCurrentCell() {
