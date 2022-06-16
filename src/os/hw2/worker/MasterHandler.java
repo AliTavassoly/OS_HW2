@@ -34,7 +34,6 @@ public class MasterHandler {
             masterScanner = new Scanner(socket.getInputStream());
 
             Logger.getInstance().log("Master connected to Worker");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
