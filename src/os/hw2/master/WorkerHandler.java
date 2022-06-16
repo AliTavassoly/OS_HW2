@@ -57,11 +57,19 @@ public class WorkerHandler {
     }
 
     private void startListeningToWorker() {
-        while (true) {
-            Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
 
-            Logger.getInstance().log("New message from worker: " + message);
-        }
+                    // TODO: send message to master
+
+                    Logger.getInstance().log("New message from worker: " + message);
+                }
+            }
+        });
+        thread.start();
     }
 
     private void connectToWorker() {
@@ -83,8 +91,8 @@ public class WorkerHandler {
     public void runTask(Task task) {
         isBusy = true;
 
-        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
-        sendMessage(message);
+//        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
+//        sendMessage(message); TODO: uncomment
     }
 
     public boolean isBusy(){

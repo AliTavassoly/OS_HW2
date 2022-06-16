@@ -93,12 +93,12 @@ public class Main {
         masterPort = Integer.parseInt(inputScanner.nextLine());
         numberOfWorkers = Integer.parseInt(inputScanner.nextLine());
 
-        Scheduling scheduling = Scheduling.valueOf(inputScanner.nextLine());
+        scheduling = Scheduling.valueOf(inputScanner.nextLine());
 
         if (scheduling == Scheduling.RR)
             interruptInterval = Integer.parseInt(inputScanner.nextLine());
 
-        Deadlock deadlock = Deadlock.valueOf(inputScanner.nextLine());
+        deadlock = Deadlock.valueOf(inputScanner.nextLine());
 
         storagePort = Integer.parseInt(inputScanner.nextLine());
 
