@@ -12,35 +12,29 @@ import java.util.Scanner;
 public class Storage {
     private int storagePort, numberOfWorkers;
 
-    private ServerSocket serverSocket;
-    private PrintStream masterPrintStream;
-    private Scanner masterScanner;
+    private ServerSocket storageServerSocket;
 
-    private PrintStream[] workerPrintStreams;
-    private Scanner[] workerScanners;
+    private MasterHandler masterHandler;
+
+    private WorkerHandler[] workerHandlers;
 
     private ArrayList<Integer> memory;
 
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
         this.numberOfWorkers = numberOfWorkers;
-        this.workerScanners = new Scanner[numberOfWorkers];
-        this.workerPrintStreams = new PrintStream[numberOfWorkers];
 
         memory = new ArrayList<>();
     }
 
     public void start(){
         try {
-            serverSocket = new ServerSocket(storagePort);
+            storageServerSocket = new ServerSocket(storagePort);
 
-            Socket socket = serverSocket.accept();
-            masterPrintStream = new PrintStream(socket.getOutputStream());
-            masterScanner = new Scanner(socket.getInputStream());
+            masterHandler = new MasterHandler(storageServerSocket);
+            masterHandler.getMasterConnection();
 
-            Logger.getInstance().log("Master connected to Storage");
-
-            initializeMemory(masterScanner.nextLine());
+            masterHandler.initializeMemory(this.memory);
 
             waitForWorkersToConnect();
         } catch (IOException e) {
@@ -48,34 +42,13 @@ public class Storage {
         }
     }
 
-    private void initializeMemory(String memoryString) {
-        String[] listOfData = memoryString.split(" ");
-
-        for (int i = 0; i < listOfData.length; i++)
-            memory.add(Integer.parseInt(listOfData[i]));
-
-        Logger.getInstance().log("Memory initialized with: " + memory);
-    }
-
     private void waitForWorkersToConnect() {
         Thread waitForWorkersConnectThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < numberOfWorkers; i++){
-                    try {
-                        Socket socket = serverSocket.accept();
-                        PrintStream printStream = new PrintStream(socket.getOutputStream());
-                        Scanner scanner = new Scanner(socket.getInputStream());
-
-                        int workerID = Integer.parseInt(scanner.nextLine());
-
-                        Logger.getInstance().log("Worker with ID: " + workerID + " connected");
-
-                        workerPrintStreams[workerID] = printStream;
-                        workerScanners[workerID] = scanner;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    WorkerHandler workerHandler = new WorkerHandler(storageServerSocket);
+                    workerHandlers[workerHandler.getWorkerID()] = workerHandler;
                 }
             }
         });
