@@ -1,9 +1,6 @@
 package os.hw2.util;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Timestamp;
 
 public class Logger {
@@ -35,6 +32,18 @@ public class Logger {
 
     private Logger(){
         createFile();
+    }
+
+    public void clearFile() {
+        try {
+            File file = new File("logs.txt");
+            PrintWriter writer = null;
+            writer = new PrintWriter(file);
+            writer.print("");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void log(String message){

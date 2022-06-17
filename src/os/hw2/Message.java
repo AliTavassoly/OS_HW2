@@ -59,6 +59,8 @@ public class Message {
                 "type=" + type +
                 ", task=" + task +
                 ", sender=" + sender +
+                ", cellValue=" + cellValue +
+                ", workerID=" + workerID +
                 '}';
     }
 }

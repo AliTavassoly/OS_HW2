@@ -68,6 +68,7 @@ public class Storage {
 
     private void cellRequest(int cellNumber, int workerID) {
         // TODO: check if cell number is available
+        Logger.getInstance().log(" " + workerHandlers[workerID]);
         workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
     }
 

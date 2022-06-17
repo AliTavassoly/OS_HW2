@@ -43,6 +43,7 @@ public class Main {
 
     public static void main(String[] args) {
         Logger.processName = "Master";
+        Logger.getInstance().clearFile();
         Logger.getInstance().log("Process start");
 
         input();

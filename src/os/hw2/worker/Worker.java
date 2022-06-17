@@ -18,6 +18,8 @@ public class Worker {
 
     private Task task;
 
+    private Thread taskThread;
+
     public Worker(int workerPort, int storagePort, int id) {
         this.workerPort = workerPort;
         this.storagePort = storagePort;
@@ -48,6 +50,7 @@ public class Worker {
                 runTask(message.getTask());
                 break;
             case INTERRUPT:
+                // TODO: threadTask.interrupt
                 break;
             case TASKBACK:
                 break;
@@ -75,21 +78,18 @@ public class Worker {
     private int runSubTask() {
         long sleepTime = task.startSleep();
         Logger.getInstance().log("Sleep time: " + sleepTime);
-        synchronized (task) {
-            try {
-                Logger.getInstance().log("Start sleeping...");
-                wait(sleepTime);
-                Logger.getInstance().log("End sleeping...");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            // If task is interrupted
+            e.printStackTrace();
         }
         return task.stopSleep();
     }
 
     private void runTask(Task task) {
         Logger.getInstance().log("Start running task with ID: " + task.getId());
-        new Thread(() -> {
+        taskThread = new Thread(() -> {
             this.task = task;
             while (true) {
                 int state = runSubTask();
@@ -107,7 +107,9 @@ public class Worker {
                     requestForStorageCell(task.getCurrentCell());
                 }
             }
-        }).start();
+        });
+
+        taskThread.start();
     }
 
     private void cellResponse(Message message) {

@@ -75,7 +75,7 @@ public class WorkerHandler {
     }
 
     private void sendMessage(Message message) {
-        workerPrintStream.println(message);
+        workerPrintStream.println(gson.toJson(message));
         workerPrintStream.flush();
     }
 }

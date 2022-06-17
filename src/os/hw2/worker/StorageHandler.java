@@ -59,6 +59,9 @@ public class StorageHandler {
         Thread thread = new Thread(() -> {
             while (true) {
                 Message message = gson.fromJson(storageScanner.nextLine(), Message.class);
+
+                Logger.getInstance().log("New message from storage: " + message);
+
                 worker.newMessageFromStorage(message);
             }
         });
