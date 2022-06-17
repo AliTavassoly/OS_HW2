@@ -23,6 +23,7 @@ public class Storage {
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
         this.numberOfWorkers = numberOfWorkers;
+        this.workerHandlers = new WorkerHandler[numberOfWorkers];
 
         memory = new ArrayList<>();
     }
