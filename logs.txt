@@ -1,0 +1,17 @@
+Master:  Process start   @   2022-06-18 01:10:05.354
+Master:  Storage process created, PID: 1616, Port: 8001   @   2022-06-18 01:10:05.472
+Storage:  Process start, PID: 1616   @   2022-06-18 01:10:05.622
+Storage:  Master connected to Storage   @   2022-06-18 01:10:06.123
+Storage:  Hello   @   2022-06-18 01:10:06.123
+Storage:  Memory initialized with: [1, 2, 3, 0]   @   2022-06-18 01:10:06.128
+Storage:  Bye   @   2022-06-18 01:10:06.128
+Master:  Worker process created, PID: 11892, Port: 12345   @   2022-06-18 01:10:06.175
+Worker:  Process start, PID: 11892, worker ID: 0   @   2022-06-18 01:10:06.342
+Worker:  Master connected to Worker   @   2022-06-18 01:10:06.819
+Storage:  Worker with ID: 0 connected   @   2022-06-18 01:10:06.842
+Master:  Worker process created, PID: 6752, Port: 12346   @   2022-06-18 01:10:06.861
+Worker:  Process start, PID: 6752, worker ID: 1   @   2022-06-18 01:10:07.013
+Worker:  Master connected to Worker   @   2022-06-18 01:10:07.494
+Storage:  Worker with ID: 1 connected   @   2022-06-18 01:10:07.516
+Worker:  New message from master: Message{type=ASSIGN, task=Task{cells=[0, 1, 2], sleeps=[50, 50, 150], id=0, sum=0, lastStartedSleep=0}, sender=MASTER}   @   2022-06-18 01:10:07.632
+Worker:  New message from master: Message{type=ASSIGN, task=Task{cells=[1, 2, 3], sleeps=[0, 100, 100], id=1, sum=0, lastStartedSleep=0}, sender=MASTER}   @   2022-06-18 01:10:07.634

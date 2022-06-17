@@ -1,0 +1,16 @@
+3
+C:\\Users\\Alico\\.jdks\\corretto-11.0.14.1\\bin\\java.exe
+-classpath
+out/production/OS_HW2/
+8000
+2
+RR
+100
+NONE
+8001
+0 1 2 3
+4
+50 0
+100 1 100 1 50 1
+50 0 100 0 50 0
+100 2 50 3 100
