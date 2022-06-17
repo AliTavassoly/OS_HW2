@@ -45,13 +45,10 @@ public class MasterHandler {
     }
 
     public void startListening() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
-                    worker.newMessageFromMaster(message);
-                }
+        Thread thread = new Thread(() -> {
+            while (true) {
+                Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
+                worker.newMessageFromMaster(message);
             }
         });
         thread.start();

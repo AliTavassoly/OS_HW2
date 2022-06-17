@@ -82,18 +82,15 @@ public class Worker {
 
     private int runSubTask() {
         long sleepTime = task.startSleep();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (task) {
-                    try {
-                        wait(sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        Thread thread = new Thread(() -> {
+            synchronized (task) {
+                try {
+                    wait(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                int state = task.stopSleep();
             }
+            int state = task.stopSleep();
         });
         thread.start();
         return 0; // TODO: ???

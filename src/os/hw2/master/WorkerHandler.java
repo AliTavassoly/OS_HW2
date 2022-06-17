@@ -57,16 +57,13 @@ public class WorkerHandler {
     }
 
     private void startListeningToWorker() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
+        Thread thread = new Thread(() -> {
+            while (true) {
+                Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
 
-                    // TODO: send message to master
+                // TODO: send message to master
 
-                    Logger.getInstance().log("New message from worker: " + message);
-                }
+                Logger.getInstance().log("New message from worker: " + message);
             }
         });
         thread.start();

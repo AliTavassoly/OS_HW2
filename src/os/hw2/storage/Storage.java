@@ -44,13 +44,10 @@ public class Storage {
     }
 
     private void waitForWorkersToConnect() {
-        Thread waitForWorkersConnectThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < numberOfWorkers; i++){
-                    WorkerHandler workerHandler = new WorkerHandler(storageServerSocket);
-                    workerHandlers[workerHandler.getWorkerID()] = workerHandler;
-                }
+        Thread waitForWorkersConnectThread = new Thread(() -> {
+            for (int i = 0; i < numberOfWorkers; i++){
+                WorkerHandler workerHandler = new WorkerHandler(storageServerSocket);
+                workerHandlers[workerHandler.getWorkerID()] = workerHandler;
             }
         });
         waitForWorkersConnectThread.start();

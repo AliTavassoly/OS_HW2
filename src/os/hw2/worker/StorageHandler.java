@@ -55,13 +55,10 @@ public class StorageHandler {
     }
 
     public void startListening() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(storageScanner.nextLine(), Message.class);
-                    worker.newMessageFromStorage(message);
-                }
+        Thread thread = new Thread(() -> {
+            while (true) {
+                Message message = gson.fromJson(storageScanner.nextLine(), Message.class);
+                worker.newMessageFromStorage(message);
             }
         });
         thread.start();
