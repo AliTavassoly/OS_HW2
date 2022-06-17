@@ -77,13 +77,15 @@ public class Worker {
     // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
     private int runSubTask() {
         long sleepTime = task.startSleep();
-        Logger.getInstance().log("Sleep time: " + sleepTime);
+        Logger.getInstance().log("Worker ID: " + id + ", Sleep time: " + sleepTime);
         try {
+            Logger.getInstance().log("Worker ID: " + id + ", Start sleep: ");
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             // If task is interrupted
             e.printStackTrace();
         }
+        Logger.getInstance().log("Worker ID: " + id + ", Stop sleep: ");
         return task.stopSleep();
     }
 
