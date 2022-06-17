@@ -1,5 +1,6 @@
 package os.hw2.storage;
 
+import os.hw2.Message;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -31,11 +32,7 @@ public class Storage {
 
             masterHandler = new MasterHandler(storageServerSocket);
 
-            Logger.getInstance().log("Hello");
-
             masterHandler.initializeMemory(this.memory);
-
-            Logger.getInstance().log("Bye");
 
             waitForWorkersToConnect();
         } catch (IOException e) {
@@ -67,5 +64,18 @@ public class Storage {
 
         Storage storage = new Storage(port, numberOfWorkers);
         storage.start();
+    }
+
+    private void cellRequest(int cellNumber, int workerID) {
+        // TODO: check if cell number is available
+        workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
+    }
+
+    public void newMessageFromWorker(Message message) {
+        switch (message.getType()) {
+            case CELLREQUEST:
+                cellRequest(message.getCellValue(), message.getWorkerID());
+                break;
+        }
     }
 }

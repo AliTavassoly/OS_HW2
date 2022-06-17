@@ -57,18 +57,25 @@ public class WorkerHandler {
     }
 
     private void listenToWorker() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
+        Thread thread = new Thread(() -> {
+            while (true) {
+                Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
 
-                    Logger.getInstance().log("New message from worker: " + message);
+                Logger.getInstance().log("New message from worker: " + message);
 
-
-                }
+                storage.newMessageFromWorker(message);
             }
         });
         thread.start();
+    }
+
+    public void sendCellValue(Integer cellValue) {
+        Message message = new Message(Message.Type.CELLRESPONSE, Message.Sender.STORAGE, cellValue, workerID);
+        sendMessage(message);
+    }
+
+    private void sendMessage(Message message) {
+        workerPrintStream.println(message);
+        workerPrintStream.flush();
     }
 }

@@ -60,7 +60,7 @@ public class Worker {
         Logger.getInstance().log("New message from storage: " + message.getType());
 
         switch (message.getType()) {
-            case CELLREQUEST:
+            case CELLRESPONSE:
                 cellResponse(message);
                 break;
         }
@@ -74,9 +74,12 @@ public class Worker {
     // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
     private int runSubTask() {
         long sleepTime = task.startSleep();
+        Logger.getInstance().log("Sleep time: " + sleepTime);
         synchronized (task) {
             try {
+                Logger.getInstance().log("Start sleeping...");
                 wait(sleepTime);
+                Logger.getInstance().log("End sleeping...");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -85,10 +88,13 @@ public class Worker {
     }
 
     private void runTask(Task task) {
+        Logger.getInstance().log("Start running task with ID: " + task.getId());
         new Thread(() -> {
             this.task = task;
             while (true) {
                 int state = runSubTask();
+
+                Logger.getInstance().log("Subtask with ID: " + task.getId() + ", state: " + state);
 
                 // If task is finished or interrupted
                 if (state == -2) {

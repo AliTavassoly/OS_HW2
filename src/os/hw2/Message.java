@@ -5,6 +5,7 @@ public class Message {
         ASSIGN,
         INTERRUPT,
         CELLREQUEST,
+        CELLRESPONSE,
         TASKBACK,
         RESULT
     }
@@ -44,6 +45,10 @@ public class Message {
 
     public int getCellValue() {
         return cellValue;
+    }
+
+    public int getWorkerID() {
+        return workerID;
     }
 
     public Sender getSender() { return sender;}
