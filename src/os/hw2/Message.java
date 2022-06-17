@@ -4,7 +4,7 @@ public class Message {
     public static enum Type {
         ASSIGN,
         INTERRUPT,
-        REQUEST,
+        CELLREQUEST,
         TASKBACK,
         RESULT
     }
@@ -19,8 +19,13 @@ public class Message {
     private Task task;
     private Sender sender;
 
-    public Message (Type type) {
+    private int cellValue, workerID;
+
+    public Message (Type type, Sender sender, int cellValue, int workerID) {
         this.type = type;
+        this.sender = sender;
+        this.cellValue = cellValue;
+        this.workerID = workerID;
     }
 
     public Message (Type type, Sender sender, Task task) {
@@ -35,6 +40,10 @@ public class Message {
 
     public Type getType(){
         return type;
+    }
+
+    public int getCellValue() {
+        return cellValue;
     }
 
     public Sender getSender() { return sender;}

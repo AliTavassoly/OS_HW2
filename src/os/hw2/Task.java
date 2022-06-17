@@ -84,5 +84,19 @@ public class Task {
         return id;
     }
 
-    // TODO: toString function need to be implemented
+    public void newCellValue(Integer cellVale) {
+        cells.remove(0);
+        sum += cellVale;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "cells=" + cells +
+                ", sleeps=" + sleeps +
+                ", id=" + id +
+                ", sum=" + sum +
+                ", lastStartedSleep=" + lastStartedSleep +
+                '}';
+    }
 }

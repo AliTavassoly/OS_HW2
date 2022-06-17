@@ -123,6 +123,7 @@ public class Master {
         for (WorkerHandler workerHandler: workerHandlers) {
             if (!workerHandler.isBusy()) {
                 workerHandler.runTask(task);
+                return;
             }
         }
     }

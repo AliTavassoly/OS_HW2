@@ -25,7 +25,7 @@ public class Logger {
         BufferedWriter bw = null;
 
         try {
-            fw = new FileWriter("C:\\Users\\Alico\\Desktop\\logs.txt", true);
+            fw = new FileWriter("logs.txt", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
         } catch (IOException e) {

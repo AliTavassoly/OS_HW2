@@ -3,11 +3,8 @@ package os.hw2.storage;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Storage {
     private int storagePort, numberOfWorkers;
@@ -33,9 +30,12 @@ public class Storage {
             storageServerSocket = new ServerSocket(storagePort);
 
             masterHandler = new MasterHandler(storageServerSocket);
-            masterHandler.getMasterConnection();
+
+            Logger.getInstance().log("Hello");
 
             masterHandler.initializeMemory(this.memory);
+
+            Logger.getInstance().log("Bye");
 
             waitForWorkersToConnect();
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class Storage {
     private void waitForWorkersToConnect() {
         Thread waitForWorkersConnectThread = new Thread(() -> {
             for (int i = 0; i < numberOfWorkers; i++){
-                WorkerHandler workerHandler = new WorkerHandler(storageServerSocket);
+                WorkerHandler workerHandler = new WorkerHandler(storageServerSocket, this);
                 workerHandlers[workerHandler.getWorkerID()] = workerHandler;
             }
         });

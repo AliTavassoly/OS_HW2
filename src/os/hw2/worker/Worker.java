@@ -1,19 +1,10 @@
 package os.hw2.worker;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import os.hw2.Message;
 import os.hw2.Task;
 import os.hw2.util.Logger;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
-
+@SuppressWarnings("SynchronizeOnNonFinalField")
 public class Worker {
     private int workerPort, storagePort;
 
@@ -23,7 +14,7 @@ public class Worker {
 
     private int id;
 
-    private Integer valueLookingFor = null;
+    private Integer cellValue = null;
 
     private Task task;
 
@@ -36,9 +27,9 @@ public class Worker {
     }
 
     public void start(){
-            connectToMaster();
+        connectToMaster();
 
-            connectToStorage();
+        connectToStorage();
     }
 
     private void connectToStorage() {
@@ -52,12 +43,7 @@ public class Worker {
     }
 
     public void newMessageFromMaster(Message message) {
-        // TODO
-        Logger.getInstance().log("New message from master: " + message);
-
         switch (message.getType()) {
-            case REQUEST:
-                break;
             case ASSIGN:
                 runTask(message.getTask());
                 break;
@@ -71,8 +57,13 @@ public class Worker {
     }
 
     public void newMessageFromStorage(Message message) {
-        // TODO
         Logger.getInstance().log("New message from storage: " + message.getType());
+
+        switch (message.getType()) {
+            case CELLREQUEST:
+                cellResponse(message);
+                break;
+        }
     }
 
     public void logCreation(){
@@ -80,36 +71,65 @@ public class Worker {
         Logger.getInstance().log("Process start, PID: " + pid + ", worker ID: " + id);
     }
 
+    // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
     private int runSubTask() {
         long sleepTime = task.startSleep();
-        Thread thread = new Thread(() -> {
-            synchronized (task) {
-                try {
-                    wait(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        synchronized (task) {
+            try {
+                wait(sleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            int state = task.stopSleep();
-        });
-        thread.start();
-        return 0; // TODO: ???
+        }
+        return task.stopSleep();
     }
 
     private void runTask(Task task) {
-        this.task = task;
-        while (true) {
-            int state = runSubTask();
-            if (state == -1 || state == -2) {
-                returnTask();
-            } else {
+        new Thread(() -> {
+            this.task = task;
+            while (true) {
+                int state = runSubTask();
 
+                // If task is finished or interrupted
+                if (state == -2) {
+                    returnTaskResult();
+                } else if (state == -1) {
+                    returnIncompleteTask();
+                }
+                else {
+                    // request for storage
+                    requestForStorageCell(task.getCurrentCell());
+                }
             }
+        }).start();
+    }
+
+    private void cellResponse(Message message) {
+        this.cellValue = message.getCellValue();
+        task.notify();
+    }
+
+    private void requestForStorageCell(int cellNumber) {
+        try {
+            storageHandler.getCellValue(cellNumber);
+            synchronized (task) {
+                wait();
+            }
+            task.newCellValue(this.cellValue);
+            cellValue = null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    private void returnTask() {
+    private void returnIncompleteTask() {
+        Message message = new Message(Message.Type.TASKBACK, Message.Sender.WORKER, this.task);
+        masterHandler.sendMessageToMaster(message);
+    }
 
+    private void returnTaskResult() {
+        Message message = new Message(Message.Type.RESULT, Message.Sender.WORKER, this.task);
+        masterHandler.sendMessageToMaster(message);
     }
 
     public static void main(String[] args) {

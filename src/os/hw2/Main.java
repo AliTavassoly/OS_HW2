@@ -3,9 +3,12 @@ package os.hw2;
 import os.hw2.master.Master;
 import os.hw2.util.Logger;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
+    private static String inputFilePath = "tests/input1.txt";
     private static Scanner inputScanner;
 
     public static int commonArgsNumber;
@@ -86,7 +89,11 @@ public class Main {
     }
 
     private static void input() {
-        inputScanner = new Scanner(System.in);
+        try {
+            inputScanner = new Scanner(new File(inputFilePath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         inputArgs();
 

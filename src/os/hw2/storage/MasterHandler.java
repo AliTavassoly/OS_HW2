@@ -1,5 +1,7 @@
 package os.hw2.storage;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -14,11 +16,23 @@ public class MasterHandler {
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
+    private GsonBuilder gsonBuilder;
+    private Gson gson;
+
     public MasterHandler(ServerSocket storageServerSocket) {
         this.storageServerSocket = storageServerSocket;
+
+        createGson();
+
+        connectToMaster();
     }
 
-    public void getMasterConnection() {
+    private void createGson() {
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
+    }
+
+    public void connectToMaster() {
         try {
             Socket socket = storageServerSocket.accept();
             masterPrintStream = new PrintStream(socket.getOutputStream());

@@ -3,6 +3,7 @@ package os.hw2.worker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import os.hw2.Message;
+import os.hw2.util.Logger;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -64,5 +65,13 @@ public class StorageHandler {
         thread.start();
     }
 
+    public void getCellValue(int cellNumber) {
+        Message message = new Message(Message.Type.CELLREQUEST, Message.Sender.WORKER, cellNumber, workerID);
+        sendMessageToStorage(message);
+    }
 
+    private void sendMessageToStorage(Message message) {
+        storagePrintStream.println(gson.toJson(message, Message.class));
+        storagePrintStream.flush();
+    }
 }

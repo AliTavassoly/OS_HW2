@@ -88,8 +88,8 @@ public class WorkerHandler {
     public void runTask(Task task) {
         isBusy = true;
 
-//        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
-//        sendMessage(message); TODO: uncomment
+        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
+        sendMessage(message);
     }
 
     public boolean isBusy(){

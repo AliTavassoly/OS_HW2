@@ -26,6 +26,9 @@ public class MasterHandler {
     public MasterHandler(int workerPort, Worker worker) {
         this.workerPort = workerPort;
         this.worker = worker;
+
+        createGson();
+
         try {
             masterServerSocket = new ServerSocket(workerPort);
 
@@ -48,9 +51,17 @@ public class MasterHandler {
         Thread thread = new Thread(() -> {
             while (true) {
                 Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
+
+                Logger.getInstance().log("New message from master: " + message);
+
                 worker.newMessageFromMaster(message);
             }
         });
         thread.start();
+    }
+
+    public void sendMessageToMaster(Message message) {
+        masterPrintStream.println(gson.toJson(message, Message.class));
+        masterPrintStream.flush();
     }
 }
