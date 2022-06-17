@@ -60,8 +60,6 @@ public class Worker {
     }
 
     public void newMessageFromStorage(Message message) {
-        Logger.getInstance().log("New message from storage: " + message.getType());
-
         switch (message.getType()) {
             case CELLRESPONSE:
                 cellResponse(message);
@@ -116,6 +114,7 @@ public class Worker {
 
     private void cellResponse(Message message) {
         this.cellValue = message.getCellValue();
+        Logger.getInstance().log("Before notify"); // TODO: just for test
         task.notify();
     }
 
