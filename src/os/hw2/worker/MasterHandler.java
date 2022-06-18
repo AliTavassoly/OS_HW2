@@ -54,7 +54,7 @@ public class MasterHandler {
 
                 Logger.getInstance().log("New message from master: " + message);
 
-                worker.newMessageFromMaster(message);
+                newMessageFromMaster(message);
             }
         });
         thread.start();
@@ -70,6 +70,21 @@ public class MasterHandler {
             masterServerSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void newMessageFromMaster(Message message) {
+        switch (message.getType()) {
+            case ASSIGN:
+                worker.runTask(message.getTask());
+                break;
+            case INTERRUPT:
+                // TODO: threadTask.interrupt
+                break;
+            case TASKBACK:
+                break;
+            case RESULT:
+                break;
         }
     }
 }

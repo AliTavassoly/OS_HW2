@@ -129,4 +129,9 @@ public class WorkerHandler {
                 break;
         }
     }
+
+    public void interrupt(int taskID) {
+        Message message = new Message(Message.Type.INTERRUPT, Message.Sender.MASTER, taskID);
+        sendMessage(message);
+    }
 }

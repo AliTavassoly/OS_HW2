@@ -62,7 +62,7 @@ public class StorageHandler {
 
                 Logger.getInstance().log("New message from storage: " + message);
 
-                worker.newMessageFromStorage(message);
+                newMessageFromStorage(message);
             }
         });
         thread.start();
@@ -76,6 +76,14 @@ public class StorageHandler {
     private void sendMessageToStorage(Message message) {
         storagePrintStream.println(gson.toJson(message, Message.class));
         storagePrintStream.flush();
+    }
+
+    public void newMessageFromStorage(Message message) {
+        switch (message.getType()) {
+            case CELLRESPONSE:
+                worker.cellResponse(message);
+                break;
+        }
     }
 
     public void shutDown() {

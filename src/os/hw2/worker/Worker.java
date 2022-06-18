@@ -44,29 +44,6 @@ public class Worker {
         masterHandler.startListening();
     }
 
-    public void newMessageFromMaster(Message message) {
-        switch (message.getType()) {
-            case ASSIGN:
-                runTask(message.getTask());
-                break;
-            case INTERRUPT:
-                // TODO: threadTask.interrupt
-                break;
-            case TASKBACK:
-                break;
-            case RESULT:
-                break;
-        }
-    }
-
-    public void newMessageFromStorage(Message message) {
-        switch (message.getType()) {
-            case CELLRESPONSE:
-                cellResponse(message);
-                break;
-        }
-    }
-
     public void logCreation(){
         long pid = ProcessHandle.current().pid();
         Logger.getInstance().log("Process start, PID: " + pid + ", worker ID: " + id);
@@ -87,7 +64,7 @@ public class Worker {
         return task.stopSleep();
     }
 
-    private void runTask(Task task) {
+    public void runTask(Task task) {
         Logger.getInstance().log("Start running task with ID: " + task.getId());
         taskThread = new Thread(() -> {
             this.task = task;
@@ -114,7 +91,7 @@ public class Worker {
         taskThread.start();
     }
 
-    private void cellResponse(Message message) {
+    public void cellResponse(Message message) {
         this.cellValue = message.getCellValue();
         synchronized (task) {
             task.notify();

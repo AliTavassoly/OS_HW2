@@ -22,6 +22,8 @@ public class Message {
     private Task task;
     private Sender sender;
 
+    private int taskID;
+
     private int cellValue, workerID;
 
     public Message (Type type, Sender sender, int cellValue, int workerID) {
@@ -44,6 +46,12 @@ public class Message {
         this.sender = sender;
     }
 
+    public Message (Type type, Sender sender, int taskID) {
+        this.type = type;
+        this.sender = sender;
+        this.taskID = taskID;
+    }
+
     public Task getTask() {
         return task;
     }
@@ -58,6 +66,10 @@ public class Message {
 
     public int getWorkerID() {
         return workerID;
+    }
+
+    public int getTaskID() {
+        return taskID;
     }
 
     public Sender getSender() { return sender;}

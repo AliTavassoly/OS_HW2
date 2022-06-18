@@ -2,6 +2,7 @@ package os.hw2.master;
 
 import os.hw2.Main;
 import os.hw2.Task;
+import os.hw2.util.Logger;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ public class Master {
 
     private List<Task> tasks;
 
-    private int sleepTime, remainsTasks;
+    private int schedulerSleepTime, remainsTasks;
 
     public Master(int masterPort){
         this.masterPort = masterPort;
@@ -24,7 +25,7 @@ public class Master {
 
         initializeTasks();
 
-        sleepTime = 1;
+        schedulerSleepTime = 1;
     }
 
     private void initializeTasks() {
@@ -62,7 +63,7 @@ public class Master {
         while (true) {
             try {
                 assignTasks();
-                Thread.sleep(sleepTime);
+                Thread.sleep(schedulerSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -107,7 +108,24 @@ public class Master {
     }
 
     private void assignTaskRR() {
+        Task task = tasks.get(0);
+        int assignedWorkerID = assignTask(task.getId());
+        interrupter(task.getId(), assignedWorkerID);
+    }
 
+    private void interrupter(int taskID, int workerID) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(Main.interruptInterval);
+                    workerHandlers.get(workerID).interrupt(taskID);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
     private int findShortestTaskID() {
@@ -130,15 +148,17 @@ public class Master {
         return null;
     }
 
-    private void assignTask(int taskID) {
+    private int assignTask(int taskID) {
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {
             if (!workerHandler.isBusy()) {
                 workerHandler.runTask(task);
-                return;
+                return workerHandler.getId();
             }
         }
+        // This line should never be reached
+        return 0;
     }
 
     public void shutDown() {

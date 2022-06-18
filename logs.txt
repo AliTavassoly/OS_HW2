@@ -1,102 +1,54 @@
-Master:  Process start   @   2022-06-18 18:55:53.383
-Master:  Storage process created, PID: 15684, Port: 8001   @   2022-06-18 18:55:53.474
-Storage:  Process start, PID: 15684   @   2022-06-18 18:55:53.61
-Storage:  Master connected to Storage   @   2022-06-18 18:55:54.121
-Storage:  Memory initialized with: [0, 1, 2, 3]   @   2022-06-18 18:55:54.125
-Master:  Worker process created, PID: 4504, Port: 12345   @   2022-06-18 18:55:54.174
-Worker 0:  Process start, PID: 4504, worker ID: 0   @   2022-06-18 18:55:54.34
-Worker 0:  Master connected to Worker   @   2022-06-18 18:55:54.809
-Storage:  Worker with ID: 0 connected   @   2022-06-18 18:55:54.837
-Master:  Worker process created, PID: 9448, Port: 12346   @   2022-06-18 18:55:54.856
-Worker 1:  Process start, PID: 9448, worker ID: 1   @   2022-06-18 18:55:55.006
-Worker 1:  Master connected to Worker   @   2022-06-18 18:55:55.503
-Storage:  Worker with ID: 1 connected   @   2022-06-18 18:55:55.522
-Worker 0:  New message from master: Message{type=ASSIGN, task=Task{cells=[0, 0, 0, 3], sleeps=[100, 100, 100, 100], id=0, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.628
-Worker 1:  New message from master: Message{type=ASSIGN, task=Task{cells=[1, 1, 2, 1, 1], sleeps=[100, 100, 100, 100, 100], id=1, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.638
-Worker 0:  Start running task with ID: 0   @   2022-06-18 18:55:55.638
-Worker 1:  Start running task with ID: 1   @   2022-06-18 18:55:55.638
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:55.644
-Worker 1:  Start sleep:    @   2022-06-18 18:55:55.644
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:55.644
-Worker 0:  Start sleep:    @   2022-06-18 18:55:55.644
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:55.759
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:55.759
-Worker 0:  New state: 0   @   2022-06-18 18:55:55.759
-Worker 1:  New state: 1   @   2022-06-18 18:55:55.759
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.82
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=1}   @   2022-06-18 18:55:55.82
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.835
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=1, workerID=1}   @   2022-06-18 18:55:55.835
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:55.835
-Worker 0:  Start sleep:    @   2022-06-18 18:55:55.836
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:55.836
-Worker 1:  Start sleep:    @   2022-06-18 18:55:55.836
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:55.944
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:55.944
-Worker 1:  New state: 1   @   2022-06-18 18:55:55.944
-Worker 0:  New state: 0   @   2022-06-18 18:55:55.944
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=1}   @   2022-06-18 18:55:55.945
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.945
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=1, workerID=1}   @   2022-06-18 18:55:55.946
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=0, workerID=0}   @   2022-06-18 18:55:55.946
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:55.947
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:55.947
-Worker 1:  Start sleep:    @   2022-06-18 18:55:55.947
-Worker 0:  Start sleep:    @   2022-06-18 18:55:55.947
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:56.055
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:56.055
-Worker 1:  New state: 2   @   2022-06-18 18:55:56.055
-Worker 0:  New state: 0   @   2022-06-18 18:55:56.055
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=2, workerID=1}   @   2022-06-18 18:55:56.056
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.056
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=2, workerID=1}   @   2022-06-18 18:55:56.057
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.057
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:56.057
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:56.057
-Worker 1:  Start sleep:    @   2022-06-18 18:55:56.057
-Worker 0:  Start sleep:    @   2022-06-18 18:55:56.057
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:56.163
-Worker 1:  New state: 1   @   2022-06-18 18:55:56.163
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:56.163
-Worker 0:  New state: 3   @   2022-06-18 18:55:56.163
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=1}   @   2022-06-18 18:55:56.164
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=3, workerID=0}   @   2022-06-18 18:55:56.164
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=1, workerID=1}   @   2022-06-18 18:55:56.165
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:56.165
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=3, workerID=0}   @   2022-06-18 18:55:56.165
-Worker 1:  Start sleep:    @   2022-06-18 18:55:56.165
-Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=0, sum=3, lastStartedSleep=1655562356057}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.201
-Worker 0:  New message from master: Message{type=ASSIGN, task=Task{cells=[2, 3], sleeps=[100, 100, 100], id=2, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.21
-Worker 0:  Start running task with ID: 2   @   2022-06-18 18:55:56.21
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:56.211
-Worker 0:  Start sleep:    @   2022-06-18 18:55:56.211
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:56.273
-Worker 1:  New state: 1   @   2022-06-18 18:55:56.273
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=1}   @   2022-06-18 18:55:56.274
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=1, workerID=1}   @   2022-06-18 18:55:56.275
-Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=1, sum=6, lastStartedSleep=1655562356165}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.276
-Worker 1:  New message from master: Message{type=ASSIGN, task=Task{cells=[3], sleeps=[100], id=3, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.278
-Worker 1:  Start running task with ID: 3   @   2022-06-18 18:55:56.279
-Worker 1:  Sleep time: 100   @   2022-06-18 18:55:56.279
-Worker 1:  Start sleep:    @   2022-06-18 18:55:56.279
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:56.32
-Worker 0:  New state: 2   @   2022-06-18 18:55:56.32
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=2, workerID=0}   @   2022-06-18 18:55:56.321
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=2, workerID=0}   @   2022-06-18 18:55:56.322
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:56.322
-Worker 0:  Start sleep:    @   2022-06-18 18:55:56.322
-Worker 1:  Stop sleep:    @   2022-06-18 18:55:56.383
-Worker 1:  New state: 3   @   2022-06-18 18:55:56.383
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=3, workerID=1}   @   2022-06-18 18:55:56.384
-Worker 1:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=3, workerID=1}   @   2022-06-18 18:55:56.385
-Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=3, sum=3, lastStartedSleep=1655562356279}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.385
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:56.429
-Worker 0:  New state: 3   @   2022-06-18 18:55:56.429
-Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=3, workerID=0}   @   2022-06-18 18:55:56.43
-Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=3, workerID=0}   @   2022-06-18 18:55:56.431
-Worker 0:  Sleep time: 100   @   2022-06-18 18:55:56.431
-Worker 0:  Start sleep:    @   2022-06-18 18:55:56.431
-Worker 0:  Stop sleep:    @   2022-06-18 18:55:56.538
-Worker 0:  New state: -2   @   2022-06-18 18:55:56.538
-Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=2, sum=5, lastStartedSleep=1655562356431}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 18:55:56.539
-Master:  Bye bye   @   2022-06-18 18:55:56.54
+Master:  Process start   @   2022-06-18 23:22:11.179
+Master:  Storage process created, PID: 17920, Port: 8001   @   2022-06-18 23:22:11.26
+Storage:  Process start, PID: 17920   @   2022-06-18 23:22:11.4
+Storage:  Master connected to Storage   @   2022-06-18 23:22:11.919
+Storage:  Memory initialized with: [1, 2, 3, 0]   @   2022-06-18 23:22:11.923
+Master:  Worker process created, PID: 9596, Port: 12345   @   2022-06-18 23:22:11.955
+Worker 0:  Process start, PID: 9596, worker ID: 0   @   2022-06-18 23:22:12.108
+Worker 0:  Master connected to Worker   @   2022-06-18 23:22:12.588
+Storage:  Worker with ID: 0 connected   @   2022-06-18 23:22:12.621
+Worker 0:  New message from master: Message{type=ASSIGN, task=Task{cells=[0, 1, 2], sleeps=[50, 50, 150], id=0, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 23:22:12.695
+Worker 0:  Start running task with ID: 0   @   2022-06-18 23:22:12.696
+Worker 0:  New message from master: Message{type=INTERRUPT, task=null, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 23:22:12.697
+Worker 0:  Sleep time: 50   @   2022-06-18 23:22:12.699
+Worker 0:  Start sleep:    @   2022-06-18 23:22:12.699
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:12.754
+Worker 0:  New state: 0   @   2022-06-18 23:22:12.754
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 23:22:12.797
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=1, workerID=0}   @   2022-06-18 23:22:12.802
+Worker 0:  Sleep time: 50   @   2022-06-18 23:22:12.808
+Worker 0:  Start sleep:    @   2022-06-18 23:22:12.808
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:12.865
+Worker 0:  New state: 1   @   2022-06-18 23:22:12.865
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=0}   @   2022-06-18 23:22:12.866
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=2, workerID=0}   @   2022-06-18 23:22:12.867
+Worker 0:  Sleep time: 150   @   2022-06-18 23:22:12.867
+Worker 0:  Start sleep:    @   2022-06-18 23:22:12.867
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:13.018
+Worker 0:  New state: 2   @   2022-06-18 23:22:13.018
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=2, workerID=0}   @   2022-06-18 23:22:13.019
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=3, workerID=0}   @   2022-06-18 23:22:13.02
+Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=0, sum=6, lastStartedSleep=1655578332867}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 23:22:13.047
+Worker 0:  New message from master: Message{type=ASSIGN, task=Task{cells=[1, 2, 3], sleeps=[0, 100, 100], id=1, sum=0, lastStartedSleep=0}, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 23:22:13.052
+Worker 0:  Start running task with ID: 1   @   2022-06-18 23:22:13.052
+Worker 0:  Sleep time: 0   @   2022-06-18 23:22:13.052
+Worker 0:  Start sleep:    @   2022-06-18 23:22:13.052
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:13.052
+Worker 0:  New state: 1   @   2022-06-18 23:22:13.053
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=1, workerID=0}   @   2022-06-18 23:22:13.053
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=2, workerID=0}   @   2022-06-18 23:22:13.054
+Worker 0:  Sleep time: 100   @   2022-06-18 23:22:13.054
+Worker 0:  Start sleep:    @   2022-06-18 23:22:13.054
+Worker 0:  New message from master: Message{type=INTERRUPT, task=null, sender=MASTER, cellValue=0, workerID=0}   @   2022-06-18 23:22:13.072
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:13.159
+Worker 0:  New state: 2   @   2022-06-18 23:22:13.159
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=2, workerID=0}   @   2022-06-18 23:22:13.16
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=3, workerID=0}   @   2022-06-18 23:22:13.16
+Worker 0:  Sleep time: 100   @   2022-06-18 23:22:13.161
+Worker 0:  Start sleep:    @   2022-06-18 23:22:13.161
+Worker 0:  Stop sleep:    @   2022-06-18 23:22:13.267
+Worker 0:  New state: 3   @   2022-06-18 23:22:13.267
+Storage:  New message from worker: Message{type=CELLREQUEST, task=null, sender=WORKER, cellValue=3, workerID=0}   @   2022-06-18 23:22:13.268
+Worker 0:  New message from storage: Message{type=CELLRESPONSE, task=null, sender=STORAGE, cellValue=0, workerID=0}   @   2022-06-18 23:22:13.269
+Master:  New message from worker: Message{type=RESULT, task=Task{cells=[], sleeps=[], id=1, sum=5, lastStartedSleep=1655578333161}, sender=WORKER, cellValue=0, workerID=0}   @   2022-06-18 23:22:13.27
+Master:  Bye bye   @   2022-06-18 23:22:13.271
