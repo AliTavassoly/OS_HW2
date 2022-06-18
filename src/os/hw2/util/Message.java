@@ -1,4 +1,6 @@
-package os.hw2;
+package os.hw2.util;
+
+import os.hw2.Task;
 
 public class Message {
     public static enum Type {

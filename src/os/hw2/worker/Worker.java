@@ -1,6 +1,6 @@
 package os.hw2.worker;
 
-import os.hw2.Message;
+import os.hw2.util.Message;
 import os.hw2.Task;
 import os.hw2.util.Logger;
 

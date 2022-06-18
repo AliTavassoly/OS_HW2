@@ -2,7 +2,7 @@ package os.hw2.worker;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import os.hw2.Message;
+import os.hw2.util.Message;
 import os.hw2.util.Logger;
 
 import java.io.IOException;

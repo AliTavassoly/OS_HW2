@@ -2,9 +2,8 @@ package os.hw2.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import os.hw2.Message;
+import os.hw2.util.Message;
 import os.hw2.util.Logger;
-import os.hw2.worker.StorageHandler;
 
 import java.io.IOException;
 import java.io.PrintStream;

@@ -1,7 +1,5 @@
 package os.hw2;
 
-import os.hw2.util.Logger;
-
 import java.util.ArrayList;
 
 public class Task {

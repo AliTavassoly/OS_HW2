@@ -1,13 +1,11 @@
 package os.hw2.master;
 
 import os.hw2.Main;
-import os.hw2.Message;
 import os.hw2.Task;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Master {
     private int masterPort;

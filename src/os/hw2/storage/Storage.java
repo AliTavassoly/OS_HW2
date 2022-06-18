@@ -1,6 +1,6 @@
 package os.hw2.storage;
 
-import os.hw2.Message;
+import os.hw2.util.Message;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
