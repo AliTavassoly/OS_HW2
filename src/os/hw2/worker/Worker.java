@@ -75,15 +75,15 @@ public class Worker {
     // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
     private int runSubTask() {
         long sleepTime = task.startSleep();
-        Logger.getInstance().log("Worker ID: " + id + ", Sleep time: " + sleepTime);
+        Logger.getInstance().log("Sleep time: " + sleepTime);
         try {
-            Logger.getInstance().log("Worker ID: " + id + ", Start sleep: ");
+            Logger.getInstance().log("Start sleep: ");
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             // If task is interrupted
             e.printStackTrace();
         }
-        Logger.getInstance().log("Worker ID: " + id + ", Stop sleep: ");
+        Logger.getInstance().log("Stop sleep: ");
         return task.stopSleep();
     }
 
@@ -104,7 +104,7 @@ public class Worker {
                 }
                 else {
                     // request for storage
-                    requestForStorageCell(task.getCurrentCell());
+                    requestForStorageCell(state);
                 }
             }
         });
@@ -125,6 +125,7 @@ public class Worker {
             synchronized (task) {
                 task.wait();
             }
+            Logger.getInstance().log("New value: " + this.cellValue);
             task.newCellValue(this.cellValue);
             cellValue = null;
         } catch (InterruptedException e) {
@@ -143,11 +144,11 @@ public class Worker {
     }
 
     public static void main(String[] args) {
-        Logger.processName = "Worker";
-
         int workerPort = Integer.parseInt(args[0]);
         int storagePort = Integer.parseInt(args[1]);
         int id = Integer.parseInt(args[2]);
+
+        Logger.processName = "Worker " + id;
 
         Worker worker = new Worker(workerPort, storagePort, id);
 

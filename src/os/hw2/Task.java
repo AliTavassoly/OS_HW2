@@ -1,5 +1,7 @@
 package os.hw2;
 
+import os.hw2.util.Logger;
+
 import java.util.ArrayList;
 
 public class Task {
@@ -71,11 +73,6 @@ public class Task {
         return currentTime - lastStartedSleep;
     }
 
-    public int getCurrentCell() {
-        int tmp = cells.remove(0);
-        return tmp;
-    }
-
     public int getAns() {
         return sum;
     }
@@ -85,7 +82,12 @@ public class Task {
     }
 
     public void newCellValue(Integer cellVale) {
+        Logger.getInstance().log("Start Size of cells: " + this.cells.size());
+
         cells.remove(0);
+
+        Logger.getInstance().log("End Size of cells: " + this.cells.size());
+
         sum += cellVale;
     }
 
