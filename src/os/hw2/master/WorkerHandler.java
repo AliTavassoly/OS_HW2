@@ -106,6 +106,8 @@ public class WorkerHandler {
     public void sendMessage(Message message) {
         workerPrintStream.println(gson.toJson(message));
         workerPrintStream.flush();
+
+        Logger.getInstance().log("Sending message to worker: " + message);
     }
 
     public void shutDown() {
@@ -122,10 +124,18 @@ public class WorkerHandler {
         isBusy = false;
     }
 
+    private void taskBack(Task task) {
+        master.taskBack(task);
+        isBusy = false;
+    }
+
     private void newMessage(Message message) {
         switch (message.getType()) {
             case RESULT:
                 taskResult(message.getTask());
+                break;
+            case TASKBACK:
+                taskBack(message.getTask());
                 break;
         }
     }

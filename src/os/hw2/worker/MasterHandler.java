@@ -79,7 +79,7 @@ public class MasterHandler {
                 worker.runTask(message.getTask());
                 break;
             case INTERRUPT:
-                // TODO: threadTask.interrupt
+                worker.interruptTask(message.getTaskID());
                 break;
             case TASKBACK:
                 break;

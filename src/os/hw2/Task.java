@@ -1,5 +1,7 @@
 package os.hw2;
 
+import os.hw2.util.Logger;
+
 import java.util.ArrayList;
 
 public class Task {
@@ -51,14 +53,21 @@ public class Task {
     public Integer stopSleep() {
         long sleepTime = calculateSleepTime();
         if (sleepTime > sleeps.get(0)) {
-            sleeps.remove(0);
-            if (cells.size() == 0)
-                return -2;
-            return cells.get(0);
+            return sleptEnough();
         } else {
+            Logger.getInstance().log("Slept " + sleepTime + " amount of time");
             sleeps.set(0, sleeps.get(0) - sleepTime);
+            if (sleeps.get(0) <= 0)
+                return sleptEnough();
             return -1;
         }
+    }
+
+    private Integer sleptEnough() {
+        sleeps.remove(0);
+        if (cells.size() == 0)
+            return -2;
+        return cells.get(0);
     }
 
     public long startSleep() {

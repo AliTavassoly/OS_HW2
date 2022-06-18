@@ -79,7 +79,9 @@ public class Master {
     }
 
     private boolean isThereTask() {
-        return tasks.size() > 0;
+        synchronized (tasks) {
+            return tasks.size() > 0;
+        }
     }
 
     private void assignTasks() {
@@ -100,7 +102,9 @@ public class Master {
     }
 
     private void assignTaskFCFS() {
-        assignTask(tasks.get(0).getId());
+        synchronized (tasks) {
+            assignTask(tasks.get(0).getId());
+        }
     }
 
     private void assignTaskSJF() {
@@ -108,9 +112,11 @@ public class Master {
     }
 
     private void assignTaskRR() {
-        Task task = tasks.get(0);
-        int assignedWorkerID = assignTask(task.getId());
-        interrupter(task.getId(), assignedWorkerID);
+        synchronized (tasks) {
+            Task task = tasks.get(0);
+            int assignedWorkerID = assignTask(task.getId());
+            interrupter(task.getId(), assignedWorkerID);
+        }
     }
 
     private void interrupter(int taskID, int workerID) {
@@ -129,20 +135,24 @@ public class Master {
     }
 
     private int findShortestTaskID() {
-        Task chosenTask = null;
-        for(Task task: tasks) {
-            if (chosenTask == null || task.sumOfSleeps() < chosenTask.sumOfSleeps()) {
-                chosenTask = task;
+        synchronized (tasks) {
+            Task chosenTask = null;
+            for (Task task : tasks) {
+                if (chosenTask == null || task.sumOfSleeps() < chosenTask.sumOfSleeps()) {
+                    chosenTask = task;
+                }
             }
+            return chosenTask.getId();
         }
-        return chosenTask.getId();
     }
 
     private Task removeTask(int taskID) {
-        for (Task task: tasks) {
-            if (task.getId() == taskID) {
-                tasks.remove(task);
-                return task;
+        synchronized (tasks) {
+            for (Task task : tasks) {
+                if (task.getId() == taskID) {
+                    tasks.remove(task);
+                    return task;
+                }
             }
         }
         return null;
@@ -161,12 +171,6 @@ public class Master {
         return 0;
     }
 
-    public void shutDown() {
-        storageHandler.shutDown();
-        for (WorkerHandler workerHandler: workerHandlers)
-            workerHandler.shutDown();
-    }
-
     public void taskResult(Task task) {
         remainsTasks--;
 
@@ -174,5 +178,17 @@ public class Master {
 
         if (remainsTasks == 0)
             System.exit(0);
+    }
+
+    public void taskBack(Task task) {
+        synchronized (tasks) {
+            tasks.add(task);
+        }
+    }
+
+    public void shutDown() {
+        storageHandler.shutDown();
+        for (WorkerHandler workerHandler: workerHandlers)
+            workerHandler.shutDown();
     }
 }

@@ -136,6 +136,12 @@ public class Worker {
         worker.start();
     }
 
+    public void interruptTask(int taskID) {
+        if (task.getId() == taskID) {
+            taskThread.interrupt();
+        }
+    }
+
     private void shutDown() {
         masterHandler.shutDown();
         storageHandler.shutDown();
