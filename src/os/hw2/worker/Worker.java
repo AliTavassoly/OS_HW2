@@ -114,15 +114,16 @@ public class Worker {
 
     private void cellResponse(Message message) {
         this.cellValue = message.getCellValue();
-        Logger.getInstance().log("Before notify"); // TODO: just for test
-        task.notify();
+        synchronized (task) {
+            task.notify();
+        }
     }
 
     private void requestForStorageCell(int cellNumber) {
         try {
             storageHandler.getCellValue(cellNumber);
             synchronized (task) {
-                wait();
+                task.wait();
             }
             task.newCellValue(this.cellValue);
             cellValue = null;
