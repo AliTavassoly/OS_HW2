@@ -84,7 +84,7 @@ public class Master {
     }
 
     private void assignTasks() {
-        if (!isThereWorker())
+        if (!isThereWorker() || !isThereTask())
             return;
 
         switch (Main.scheduling) {
@@ -101,14 +101,25 @@ public class Master {
     }
 
     private void assignTaskFCFS() {
-        if(isThereTask())
-            assignTask(tasks.get(0).getId());
+        assignTask(tasks.get(0).getId());
     }
 
-    private void assignTaskSJF() {}
+    private void assignTaskSJF() {
+        assignTask(findShortestTaskID());
+    }
 
     private void assignTaskRR() {
 
+    }
+
+    private int findShortestTaskID() {
+        Task chosenTask = null;
+        for(Task task: tasks) {
+            if (chosenTask == null || task.sumOfSleeps() < chosenTask.sumOfSleeps()) {
+                chosenTask = task;
+            }
+        }
+        return chosenTask.getId();
     }
 
     private Task removeTask(int taskID) {
@@ -122,6 +133,7 @@ public class Master {
     }
 
     private void assignTask(int taskID) {
+        System.out.println(taskID);
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {

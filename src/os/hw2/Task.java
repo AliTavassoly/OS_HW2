@@ -73,6 +73,14 @@ public class Task {
         return currentTime - lastStartedSleep;
     }
 
+    public long sumOfSleeps() {
+        long sum = 0;
+        for (long x: sleeps) {
+            sum += x;
+        }
+        return sum;
+    }
+
     public int getAns() {
         return sum;
     }
