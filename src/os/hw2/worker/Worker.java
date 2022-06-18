@@ -94,7 +94,7 @@ public class Worker {
             while (true) {
                 int state = runSubTask();
 
-                Logger.getInstance().log("Subtask with ID: " + task.getId() + ", state: " + state);
+                Logger.getInstance().log("New state: " + state);
 
                 // If task is finished or interrupted
                 if (state == -2) {
@@ -105,6 +105,8 @@ public class Worker {
                 else {
                     // request for storage
                     requestForStorageCell(state);
+                    if (task.isFinished())
+                        returnTaskResult();
                 }
             }
         });
@@ -125,7 +127,6 @@ public class Worker {
             synchronized (task) {
                 task.wait();
             }
-            Logger.getInstance().log("New value: " + this.cellValue);
             task.newCellValue(this.cellValue);
             cellValue = null;
         } catch (InterruptedException e) {

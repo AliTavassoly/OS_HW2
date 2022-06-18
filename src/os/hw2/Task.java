@@ -82,13 +82,12 @@ public class Task {
     }
 
     public void newCellValue(Integer cellVale) {
-        Logger.getInstance().log("Start Size of cells: " + this.cells.size());
-
         cells.remove(0);
-
-        Logger.getInstance().log("End Size of cells: " + this.cells.size());
-
         sum += cellVale;
+    }
+
+    public boolean isFinished() {
+        return cells.size() == 0 && sleeps.size() == 0;
     }
 
     @Override
