@@ -22,6 +22,8 @@ public class StorageHandler {
     private GsonBuilder gsonBuilder;
     private Gson gson;
 
+    private Process process;
+
     public StorageHandler(int storagePort) {
         this.storagePort = storagePort;
 
@@ -37,7 +39,7 @@ public class StorageHandler {
 
     private void createStorageProcess() {
         try {
-            Process process = new ProcessBuilder(
+            process = new ProcessBuilder(
                     Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3], Main.commonArgs[4],
                     "os.hw2.storage.Storage",
                     String.valueOf(storagePort), String.valueOf(Main.numberOfWorkers)
@@ -75,5 +77,14 @@ public class StorageHandler {
     public void sendMessageToWorker(Message message) {
         storagePrintStream.println(gson.toJson(message));
         storagePrintStream.flush();
+    }
+
+    public void shutDown() {
+        process.destroy();
+        try {
+            storageSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -49,6 +49,10 @@ public class Main {
         input();
 
         master = new Master(Main.masterPort);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Logger.getInstance().log("Bye bye");
+            master.shutDown();
+        }));
         master.start();
     }
 

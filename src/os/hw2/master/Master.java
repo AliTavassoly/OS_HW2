@@ -18,7 +18,7 @@ public class Master {
 
     private List<Task> tasks;
 
-    private int sleepTime;
+    private int sleepTime, remainsTasks;
 
     public Master(int masterPort){
         this.masterPort = masterPort;
@@ -33,6 +33,7 @@ public class Master {
         tasks = new ArrayList<>();
         for (int i = 0; i < Main.taskNumber; i++)
             tasks.add(Main.tasks[i]);
+        remainsTasks = tasks.size();
     }
 
     private void connectToStorage() {
@@ -41,7 +42,7 @@ public class Master {
 
     private void connectToWorkers() {
         for (int i = 0; i < Main.numberOfWorkers; i++){
-            workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i));
+            workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i, this));
 
             try {
                 Thread.sleep(50);
@@ -83,6 +84,9 @@ public class Master {
     }
 
     private void assignTasks() {
+        if (!isThereWorker())
+            return;
+
         switch (Main.scheduling) {
             case FCFS:
                 assignTaskFCFS();
@@ -125,6 +129,27 @@ public class Master {
                 workerHandler.runTask(task);
                 return;
             }
+        }
+    }
+
+    public void shutDown() {
+        storageHandler.shutDown();
+        for (WorkerHandler workerHandler: workerHandlers)
+            workerHandler.shutDown();
+    }
+
+    private void taskResult(Task task) {
+        remainsTasks--;
+        System.out.println("Task " + task.getId() + " executed successfully with result " + task.getAns());
+        if (remainsTasks == 0)
+            System.exit(0);
+    }
+
+    public void newMessageFromWorker(Message message) {
+        switch (message.getType()) {
+            case RESULT:
+                taskResult(message.getTask());
+                break;
         }
     }
 }

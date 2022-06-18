@@ -152,7 +152,15 @@ public class Worker {
         Logger.processName = "Worker " + id;
 
         Worker worker = new Worker(workerPort, storagePort, id);
-
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Logger.getInstance().log("Bye bye!");
+            worker.shutDown();
+        }));
         worker.start();
+    }
+
+    private void shutDown() {
+        masterHandler.shutDown();
+        storageHandler.shutDown();
     }
 }

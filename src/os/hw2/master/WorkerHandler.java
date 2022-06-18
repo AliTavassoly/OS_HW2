@@ -26,9 +26,14 @@ public class WorkerHandler {
 
     private boolean isBusy = false;
 
-    public WorkerHandler(int workerPort){
+    private Process process;
+
+    private Master master;
+
+    public WorkerHandler(int workerPort, Master master){
         this.workerPort = workerPort;
         this.id = workerPort - Main.firstWorkerPort;
+        this.master = master;
 
         createGson();
 
@@ -44,7 +49,7 @@ public class WorkerHandler {
 
     private void createWorkerProcess() {
         try {
-            Process process = new ProcessBuilder(
+            process = new ProcessBuilder(
                     Main.commonArgs[0], Main.commonArgs[1], Main.commonArgs[2], Main.commonArgs[3], Main.commonArgs[4],
                     "os.hw2.worker.Worker",
                     String.valueOf(workerPort), String.valueOf(Main.storagePort), String.valueOf(workerPort - Main.firstWorkerPort)
@@ -60,10 +65,9 @@ public class WorkerHandler {
         Thread thread = new Thread(() -> {
             while (true) {
                 Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
-
-                // TODO: send message to master
-
                 Logger.getInstance().log("New message from worker: " + message);
+
+                master.newMessageFromWorker(message);
             }
         });
         thread.start();
@@ -103,5 +107,14 @@ public class WorkerHandler {
     public void sendMessage(Message message) {
         workerPrintStream.println(gson.toJson(message));
         workerPrintStream.flush();
+    }
+
+    public void shutDown() {
+        process.destroy();
+        try {
+            workerSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -63,7 +63,19 @@ public class Storage {
         int numberOfWorkers = Integer.parseInt(args[1]);
 
         Storage storage = new Storage(port, numberOfWorkers);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Logger.getInstance().log("Bye bye!");
+            storage.shutDown();
+        }));
         storage.start();
+    }
+
+    private void shutDown() {
+        try {
+            storageServerSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void cellRequest(int cellNumber, int workerID) {

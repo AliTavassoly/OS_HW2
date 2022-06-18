@@ -77,4 +77,12 @@ public class StorageHandler {
         storagePrintStream.println(gson.toJson(message, Message.class));
         storagePrintStream.flush();
     }
+
+    public void shutDown() {
+        try {
+            storageSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

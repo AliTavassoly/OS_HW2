@@ -64,4 +64,12 @@ public class MasterHandler {
         masterPrintStream.println(gson.toJson(message, Message.class));
         masterPrintStream.flush();
     }
+
+    public void shutDown() {
+        try {
+            masterServerSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
