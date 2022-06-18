@@ -29,6 +29,13 @@ public class Message {
         this.workerID = workerID;
     }
 
+    public Message (Type type, Sender sender, Task task, int workerID) {
+        this.type = type;
+        this.task = task;
+        this.sender = sender;
+        this.workerID = workerID;
+    }
+
     public Message (Type type, Sender sender, Task task) {
         this.type = type;
         this.task = task;

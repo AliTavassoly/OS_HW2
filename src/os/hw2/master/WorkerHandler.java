@@ -67,7 +67,7 @@ public class WorkerHandler {
                 Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
                 Logger.getInstance().log("New message from worker: " + message);
 
-                master.newMessageFromWorker(message);
+                newMessage(message);
             }
         });
         thread.start();
@@ -115,6 +115,19 @@ public class WorkerHandler {
             workerSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void taskResult(Task task) {
+        master.taskResult(task);
+        isBusy = false;
+    }
+
+    private void newMessage(Message message) {
+        switch (message.getType()) {
+            case RESULT:
+                taskResult(message.getTask());
+                break;
         }
     }
 }

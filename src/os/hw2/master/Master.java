@@ -133,7 +133,6 @@ public class Master {
     }
 
     private void assignTask(int taskID) {
-        System.out.println(taskID);
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {
@@ -150,18 +149,12 @@ public class Master {
             workerHandler.shutDown();
     }
 
-    private void taskResult(Task task) {
+    public void taskResult(Task task) {
         remainsTasks--;
+
         System.out.println("Task " + task.getId() + " executed successfully with result " + task.getAns());
+
         if (remainsTasks == 0)
             System.exit(0);
-    }
-
-    public void newMessageFromWorker(Message message) {
-        switch (message.getType()) {
-            case RESULT:
-                taskResult(message.getTask());
-                break;
-        }
     }
 }
