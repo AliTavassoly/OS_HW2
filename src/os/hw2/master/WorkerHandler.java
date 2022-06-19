@@ -106,8 +106,6 @@ public class WorkerHandler {
     public void sendMessage(Message message) {
         workerPrintStream.println(gson.toJson(message));
         workerPrintStream.flush();
-
-        Logger.getInstance().log("Sending message to worker: " + message);
     }
 
     public void shutDown() {

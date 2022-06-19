@@ -52,7 +52,7 @@ public class Task {
 
     public Integer stopSleep() {
         long sleepTime = calculateSleepTime();
-        if (sleepTime > sleeps.get(0)) {
+        if (sleepTime >= sleeps.get(0)) {
             return sleptEnough();
         } else {
             Logger.getInstance().log("Slept " + sleepTime + " amount of time");

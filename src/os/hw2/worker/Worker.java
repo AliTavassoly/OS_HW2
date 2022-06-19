@@ -18,8 +18,6 @@ public class Worker {
 
     private Task task;
 
-    private Thread taskThread;
-
     public Worker(int workerPort, int storagePort, int id) {
         this.workerPort = workerPort;
         this.storagePort = storagePort;
@@ -52,21 +50,24 @@ public class Worker {
     // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
     private int runSubTask() {
         long sleepTime = task.startSleep();
-        Logger.getInstance().log("Sleep time: " + sleepTime);
-        try {
-            Logger.getInstance().log("Start sleep: ");
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            // If task is interrupted
-            e.printStackTrace();
+        Logger.getInstance().log("Start sleep, Sleep time: " + sleepTime + " task ID: " + task.getId());
+
+        synchronized (task) {
+            try {
+                task.wait(sleepTime + 1);
+            } catch (InterruptedException e) {
+                Logger.getInstance().log(e.getMessage());
+                e.printStackTrace();
+            }
         }
+
         Logger.getInstance().log("Stop sleep: ");
         return task.stopSleep();
     }
 
     public void runTask(Task task) {
         Logger.getInstance().log("Start running task with ID: " + task.getId());
-        taskThread = new Thread(() -> {
+        new Thread(() -> {
             this.task = task;
             while (true) {
                 int state = runSubTask();
@@ -76,19 +77,21 @@ public class Worker {
                 // If task is finished or interrupted
                 if (state == -2) {
                     returnTaskResult();
+                    return;
                 } else if (state == -1) {
                     returnIncompleteTask();
+                    return;
                 }
                 else {
                     // request for storage
                     requestForStorageCell(state);
-                    if (task.isFinished())
+                    if (task.isFinished()) {
                         returnTaskResult();
+                        return;
+                    }
                 }
             }
-        });
-
-        taskThread.start();
+        }).start();
     }
 
     public void cellResponse(Message message) {
@@ -138,7 +141,9 @@ public class Worker {
 
     public void interruptTask(int taskID) {
         if (task.getId() == taskID) {
-            taskThread.interrupt();
+            synchronized (task) {
+                task.notify();
+            }
         }
     }
 

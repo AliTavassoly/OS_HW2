@@ -80,6 +80,7 @@ public class Message {
                 "type=" + type +
                 ", task=" + task +
                 ", sender=" + sender +
+                ", taskID=" + taskID +
                 ", cellValue=" + cellValue +
                 ", workerID=" + workerID +
                 '}';

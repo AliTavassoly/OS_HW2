@@ -44,7 +44,7 @@ public class Master {
             workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i, this));
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
