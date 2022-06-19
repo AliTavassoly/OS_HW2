@@ -120,15 +120,12 @@ public class Master {
     }
 
     private void interrupter(int taskID, int workerID) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(Main.interruptInterval);
-                    workerHandlers.get(workerID).interrupt(taskID);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(Main.interruptInterval);
+                workerHandlers.get(workerID).interrupt(taskID);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
         thread.start();

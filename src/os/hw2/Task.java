@@ -5,12 +5,19 @@ import os.hw2.util.Logger;
 import java.util.ArrayList;
 
 public class Task {
+    public static enum Type {
+        SLEEP,
+        READ
+    }
+
     private ArrayList<Integer> cells;
     private ArrayList<Long> sleeps;
 
     private int id, sum = 0;
 
     private long lastStartedSleep;
+
+    private Type currentTask = Type.SLEEP;
 
     public Task(ArrayList<Integer> arrayList, int id) {
         this.cells = new ArrayList<>();
@@ -50,24 +57,24 @@ public class Task {
         return cells;
     }
 
-    public Integer stopSleep() {
-        long sleepTime = calculateSleepTime();
+    public Type currentTaskType() {
+        return currentTask;
+    }
+
+    public boolean stopSleep(long sleepTime) {
         if (sleepTime >= sleeps.get(0)) {
-            return sleptEnough();
+            sleptEnough();
+            return true;
         } else {
-            Logger.getInstance().log("Slept " + sleepTime + " amount of time");
+            Logger.getInstance().log("Slept " + sleepTime + " milli seconds");
             sleeps.set(0, sleeps.get(0) - sleepTime);
-            if (sleeps.get(0) <= 0)
-                return sleptEnough();
-            return -1;
+            return false;
         }
     }
 
-    private Integer sleptEnough() {
+    private void sleptEnough() {
         sleeps.remove(0);
-        if (cells.size() == 0)
-            return -2;
-        return cells.get(0);
+        currentTask = Type.READ;
     }
 
     public long startSleep() {
@@ -98,8 +105,15 @@ public class Task {
 
     public void newCellValue(Integer cellVale) {
         cells.remove(0);
+        currentTask = Type.SLEEP;
         sum += cellVale;
     }
+
+    public int getCurrentCell() {
+        return cells.get(0);
+    }
+
+    public long getCurrentSleep() { return sleeps.get(0); }
 
     public boolean isFinished() {
         return cells.size() == 0 && sleeps.size() == 0;

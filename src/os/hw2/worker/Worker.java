@@ -18,6 +18,8 @@ public class Worker {
 
     private Task task;
 
+    private Thread taskThread;
+
     public Worker(int workerPort, int storagePort, int id) {
         this.workerPort = workerPort;
         this.storagePort = storagePort;
@@ -48,50 +50,54 @@ public class Worker {
     }
 
     // Returns -1 if sleep is interrupted, -2 if task is finished and cell value otherwise
-    private int runSubTask() {
-        long sleepTime = task.startSleep();
-        Logger.getInstance().log("Start sleep, Sleep time: " + sleepTime + " task ID: " + task.getId());
+    private boolean runSleepingSubTask() {
+        long sleepTime = System.currentTimeMillis();
+        Logger.getInstance().log("Start sleep, Sleep time: " + sleepTime + " task ID: " + task.getCurrentSleep());
 
         synchronized (task) {
             try {
-                task.wait(sleepTime + 1);
+                task.wait(task.getCurrentSleep() + 1);
             } catch (InterruptedException e) {
                 Logger.getInstance().log(e.getMessage());
                 e.printStackTrace();
             }
         }
 
-        Logger.getInstance().log("Stop sleep: ");
-        return task.stopSleep();
+        sleepTime = System.currentTimeMillis() - sleepTime;
+
+        Logger.getInstance().log("Stop sleep");
+        return task.stopSleep(sleepTime);
     }
 
     public void runTask(Task task) {
         Logger.getInstance().log("Start running task with ID: " + task.getId());
-        new Thread(() -> {
+        taskThread = new Thread(() -> {
             this.task = task;
             while (true) {
-                int state = runSubTask();
-
-                Logger.getInstance().log("New state: " + state);
-
-                // If task is finished or interrupted
-                if (state == -2) {
+                if (task.isFinished()) {
                     returnTaskResult();
-                    return;
-                } else if (state == -1) {
-                    returnIncompleteTask();
-                    return;
+                    break;
                 }
-                else {
-                    // request for storage
-                    requestForStorageCell(state);
-                    if (task.isFinished()) {
-                        returnTaskResult();
-                        return;
+
+                if (task.currentTaskType() == Task.Type.SLEEP) {
+                    boolean sleepState = runSleepingSubTask();
+
+                    if (!sleepState) {
+                        returnIncompleteTask();
+                        break;
+                    }
+                } else {
+                    int cellNumber = task.getCurrentCell();
+                    boolean cellRequestState = requestForStorageCell(cellNumber);
+
+                    if (!cellRequestState) {
+                        returnIncompleteTask();
+                        break;
                     }
                 }
             }
-        }).start();
+        });
+        taskThread.start();
     }
 
     public void cellResponse(Message message) {
@@ -101,27 +107,37 @@ public class Worker {
         }
     }
 
-    private void requestForStorageCell(int cellNumber) {
+    private boolean requestForStorageCell(int cellNumber) {
         try {
             storageHandler.getCellValue(cellNumber);
+            Logger.getInstance().log("Start waiting for cell " + cellNumber + " ...");
+
             synchronized (task) {
                 task.wait();
             }
+
+            if (this.cellValue == null)
+                return false;
+
             task.newCellValue(this.cellValue);
+            Logger.getInstance().log("Got value of cell " + cellNumber + " ... is equal to: " + this.cellValue);
             cellValue = null;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     private void returnIncompleteTask() {
         Message message = new Message(Message.Type.TASKBACK, Message.Sender.WORKER, this.task);
         masterHandler.sendMessageToMaster(message);
+
     }
 
     private void returnTaskResult() {
         Message message = new Message(Message.Type.RESULT, Message.Sender.WORKER, this.task);
         masterHandler.sendMessageToMaster(message);
+
     }
 
     public static void main(String[] args) {

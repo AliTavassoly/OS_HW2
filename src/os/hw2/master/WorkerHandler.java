@@ -55,9 +55,21 @@ public class WorkerHandler {
             ).start();
 
             Logger.getInstance().log("Worker process created, PID: " + process.pid() + ", Port: " + workerPort);
+
+            startErrorListener();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void startErrorListener() {
+        Thread thread = new Thread(() -> {
+            Scanner scanner = new Scanner(process.getErrorStream());
+            while (true) {
+                System.out.println(scanner.nextLine());
+            }
+        });
+        thread.start();
     }
 
     private void startListeningToWorker() {
