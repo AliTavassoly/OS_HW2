@@ -53,25 +53,23 @@ public class WorkerHandler {
     }
 
     private void startErrorListener() {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             Scanner scanner = new Scanner(process.getErrorStream());
             while (true) {
                 System.out.println(scanner.nextLine());
             }
-        });
-        thread.start();
+        }).start();
     }
 
     private void startListeningToWorker() {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 Message message = MyGson.getGson().fromJson(workerScanner.nextLine(), Message.class);
                 Logger.getInstance().log("New message from worker: " + message);
 
                 newMessage(message);
             }
-        });
-        thread.start();
+        }).start();
     }
 
     private void connectToWorker() {

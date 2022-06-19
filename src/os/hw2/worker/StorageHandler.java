@@ -47,7 +47,7 @@ public class StorageHandler {
     }
 
     public void startListening() {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 Message message = MyGson.getGson().fromJson(storageScanner.nextLine(), Message.class);
 
@@ -55,8 +55,7 @@ public class StorageHandler {
 
                 newMessageFromStorage(message);
             }
-        });
-        thread.start();
+        }).start();
     }
 
     public void getCellValue(int cellNumber) {

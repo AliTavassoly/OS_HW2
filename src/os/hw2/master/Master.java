@@ -119,15 +119,14 @@ public class Master {
     }
 
     private void interrupter(int taskID, int workerID) {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             try {
                 Thread.sleep(Main.interruptInterval);
                 workerHandlers.get(workerID).interrupt(taskID);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-        thread.start();
+        }).start();
     }
 
     private int findShortestTaskID() {

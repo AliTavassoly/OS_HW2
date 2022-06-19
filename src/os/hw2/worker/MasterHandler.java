@@ -39,7 +39,7 @@ public class MasterHandler {
     }
 
     public void startListening() {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 Message message = MyGson.getGson().fromJson(masterScanner.nextLine(), Message.class);
 
@@ -47,8 +47,7 @@ public class MasterHandler {
 
                 newMessageFromMaster(message);
             }
-        });
-        thread.start();
+        }).start();
     }
 
     public void sendMessageToMaster(Message message) {

@@ -47,7 +47,7 @@ public class WorkerHandler {
     }
 
     private void listenToWorker() {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 Message message = MyGson.getGson().fromJson(workerScanner.nextLine(), Message.class);
 
@@ -55,8 +55,7 @@ public class WorkerHandler {
 
                 storage.newMessageFromWorker(message);
             }
-        });
-        thread.start();
+        }).start();
     }
 
     public void sendCellValue(Integer cellValue) {
