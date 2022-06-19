@@ -58,7 +58,6 @@ public class Worker {
             try {
                 task.wait(task.getCurrentSleep() + 1);
             } catch (InterruptedException e) {
-                Logger.getInstance().log(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -131,13 +130,11 @@ public class Worker {
     private void returnIncompleteTask() {
         Message message = new Message(Message.Type.TASKBACK, Message.Sender.WORKER, this.task);
         masterHandler.sendMessageToMaster(message);
-
     }
 
     private void returnTaskResult() {
         Message message = new Message(Message.Type.RESULT, Message.Sender.WORKER, this.task);
         masterHandler.sendMessageToMaster(message);
-
     }
 
     public static void main(String[] args) {

@@ -48,7 +48,6 @@ public class MasterHandler {
     }
 
     public void startListening() {
-        Logger.getInstance().log("Start listening to master...");
         Thread thread = new Thread(() -> {
             while (true) {
                 Message message = gson.fromJson(masterScanner.nextLine(), Message.class);

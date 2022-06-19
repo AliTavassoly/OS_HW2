@@ -2,7 +2,6 @@ package os.hw2.master;
 
 import os.hw2.Main;
 import os.hw2.Task;
-import os.hw2.util.Logger;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

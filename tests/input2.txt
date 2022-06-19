@@ -7,7 +7,7 @@ C:\Users\Alico\Desktop\OS_HW2\out\production\OS_HW2;C:\Users\Alico\Desktop\OS_HW
 8000
 2
 RR
-100
+150
 NONE
 8001
 0 1 2 3

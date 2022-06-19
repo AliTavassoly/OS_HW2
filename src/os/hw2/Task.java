@@ -15,8 +15,6 @@ public class Task {
 
     private int id, sum = 0;
 
-    private long lastStartedSleep;
-
     private Type currentTask = Type.SLEEP;
 
     public Task(ArrayList<Integer> arrayList, int id) {
@@ -77,16 +75,6 @@ public class Task {
         currentTask = Type.READ;
     }
 
-    public long startSleep() {
-        lastStartedSleep = System.currentTimeMillis();
-        return sleeps.get(0);
-    }
-
-    private long calculateSleepTime() {
-        long currentTime = System.currentTimeMillis();
-        return currentTime - lastStartedSleep;
-    }
-
     public long sumOfSleeps() {
         long sum = 0;
         for (long x: sleeps) {
@@ -126,7 +114,6 @@ public class Task {
                 ", sleeps=" + sleeps +
                 ", id=" + id +
                 ", sum=" + sum +
-                ", lastStartedSleep=" + lastStartedSleep +
                 '}';
     }
 }
