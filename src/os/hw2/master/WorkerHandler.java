@@ -1,11 +1,11 @@
 package os.hw2.master;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import os.hw2.Main;
 import os.hw2.util.Message;
 import os.hw2.Task;
 import os.hw2.util.Logger;
+import os.hw2.util.MyGson;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -20,9 +20,6 @@ public class WorkerHandler {
 
     private int workerPort, id;
 
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
-
     private boolean isBusy = false;
 
     private Process process;
@@ -34,16 +31,9 @@ public class WorkerHandler {
         this.id = workerPort - Main.firstWorkerPort;
         this.master = master;
 
-        createGson();
-
         connectToWorker();
 
         startListeningToWorker();
-    }
-
-    private void createGson(){
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
     }
 
     private void createWorkerProcess() {
@@ -75,7 +65,7 @@ public class WorkerHandler {
     private void startListeningToWorker() {
         Thread thread = new Thread(() -> {
             while (true) {
-                Message message = gson.fromJson(workerScanner.nextLine(), Message.class);
+                Message message = MyGson.getGson().fromJson(workerScanner.nextLine(), Message.class);
                 Logger.getInstance().log("New message from worker: " + message);
 
                 newMessage(message);
@@ -116,7 +106,7 @@ public class WorkerHandler {
     }
 
     public void sendMessage(Message message) {
-        workerPrintStream.println(gson.toJson(message));
+        workerPrintStream.println(MyGson.getGson().toJson(message));
         workerPrintStream.flush();
     }
 

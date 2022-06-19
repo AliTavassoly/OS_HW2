@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import os.hw2.util.Message;
 import os.hw2.util.Logger;
+import os.hw2.util.MyGson;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -16,9 +17,6 @@ public class MasterHandler {
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
-
     private int workerPort;
 
     private Worker worker;
@@ -26,8 +24,6 @@ public class MasterHandler {
     public MasterHandler(int workerPort, Worker worker) {
         this.workerPort = workerPort;
         this.worker = worker;
-
-        createGson();
 
         try {
             masterServerSocket = new ServerSocket(workerPort);
@@ -42,15 +38,10 @@ public class MasterHandler {
         }
     }
 
-    private void createGson() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
-    }
-
     public void startListening() {
         Thread thread = new Thread(() -> {
             while (true) {
-                Message message = gson.fromJson(masterScanner.nextLine(), Message.class);
+                Message message = MyGson.getGson().fromJson(masterScanner.nextLine(), Message.class);
 
                 Logger.getInstance().log("New message from master: " + message);
 
@@ -61,7 +52,7 @@ public class MasterHandler {
     }
 
     public void sendMessageToMaster(Message message) {
-        masterPrintStream.println(gson.toJson(message, Message.class));
+        masterPrintStream.println(MyGson.getGson().toJson(message, Message.class));
         masterPrintStream.flush();
     }
 

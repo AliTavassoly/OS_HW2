@@ -16,20 +16,10 @@ public class MasterHandler {
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
-
     public MasterHandler(ServerSocket storageServerSocket) {
         this.storageServerSocket = storageServerSocket;
 
-        createGson();
-
         connectToMaster();
-    }
-
-    private void createGson() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
     }
 
     public void connectToMaster() {

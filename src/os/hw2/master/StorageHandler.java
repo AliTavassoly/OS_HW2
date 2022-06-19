@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import os.hw2.Main;
 import os.hw2.util.Message;
 import os.hw2.util.Logger;
+import os.hw2.util.MyGson;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,22 +20,12 @@ public class StorageHandler {
 
     private int storagePort;
 
-    private GsonBuilder gsonBuilder;
-    private Gson gson;
-
     private Process process;
 
     public StorageHandler(int storagePort) {
         this.storagePort = storagePort;
 
         connectToStorage();
-
-        createGson();
-    }
-
-    private void createGson(){
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
     }
 
     private void createStorageProcess() {
@@ -75,7 +66,7 @@ public class StorageHandler {
     }
 
     public void sendMessageToWorker(Message message) {
-        storagePrintStream.println(gson.toJson(message));
+        storagePrintStream.println(MyGson.getGson().toJson(message));
         storagePrintStream.flush();
     }
 
