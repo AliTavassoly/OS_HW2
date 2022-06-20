@@ -53,7 +53,7 @@ public class WorkerHandler {
 
                 Logger.getInstance().log("New message from worker: " + message);
 
-                storage.newMessageFromWorker(message);
+                newMessageFromWorker(message);
             }
         }).start();
     }
@@ -66,5 +66,13 @@ public class WorkerHandler {
     private void sendMessage(Message message) {
         workerPrintStream.println(MyGson.getGson().toJson(message));
         workerPrintStream.flush();
+    }
+
+    public void newMessageFromWorker(Message message) {
+        switch (message.getType()) {
+            case CELLREQUEST:
+                storage.cellRequest(message.getCellValue(), message.getWorkerID());
+                break;
+        }
     }
 }

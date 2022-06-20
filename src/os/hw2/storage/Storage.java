@@ -77,16 +77,8 @@ public class Storage {
         }
     }
 
-    private void cellRequest(int cellNumber, int workerID) {
+    public void cellRequest(int cellNumber, int workerID) {
         // TODO: check if cell number is available
         workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
-    }
-
-    public void newMessageFromWorker(Message message) {
-        switch (message.getType()) {
-            case CELLREQUEST:
-                cellRequest(message.getCellValue(), message.getWorkerID());
-                break;
-        }
     }
 }
