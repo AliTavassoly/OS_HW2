@@ -6,7 +6,6 @@ import os.hw2.util.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 public class Storage {
     private int storagePort, numberOfWorkers, numberOfCells;
@@ -19,7 +18,9 @@ public class Storage {
 
     private ArrayList<Integer> memory;
 
-    private Semaphore[] semaphores;
+    private ArrayList<Waiter> waiters[];
+
+    private Integer[] locks;
 
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
@@ -46,9 +47,13 @@ public class Storage {
     }
 
     private void initializeSemaphores() {
-        semaphores = new Semaphore[numberOfCells];
-        for (int i = 0; i < numberOfCells; i++)
-            semaphores[i] = new Semaphore(1);
+        waiters = new ArrayList[numberOfCells];
+        locks = new Integer[numberOfCells];
+
+        for (int i = 0; i < numberOfCells; i++) {
+            waiters[i] = new ArrayList<Waiter>();
+            locks[i] = -1;
+        }
     }
 
     private void waitForWorkersToConnect() {
@@ -80,6 +85,38 @@ public class Storage {
         storage.start();
     }
 
+    public void cellRequest(Task task, int cellNumber, int workerID) {
+        sendCellValue(task, cellNumber, workerID);
+    }
+
+    private synchronized void sendCellValue(Task task, int cellNumber, int workerID) {
+        if(locks[cellNumber] == -1 || locks[cellNumber] == task.getId()) {
+            locks[cellNumber] = task.getId();
+            workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
+        } else {
+            waiters[cellNumber].add(new Waiter(task.getId(), workerID));
+        }
+    }
+
+    private void unlockCell(int cell){
+        if (waiters[cell].size() > 0) {
+            Waiter waiter = waiters[cell].remove(0);
+            locks[cell] = waiter.getTaskID();
+            workerHandlers[waiter.getWorkerID()].sendCellValue(memory.get(cell));
+        }
+    }
+
+    public synchronized void unlockTask(Task task) {
+        ArrayList<Integer> unlocked = new ArrayList<>();
+        for (int cell: task.getInitialCells()) {
+            if (!unlocked.contains(cell)) {
+                locks[task.getId()] = -1;
+                unlockCell(cell);
+                unlocked.add(cell);
+            }
+        }
+    }
+
     private void shutDown() {
         try {
             storageServerSocket.close();
@@ -88,28 +125,20 @@ public class Storage {
         }
     }
 
-    public void cellRequest(Task task, int cellNumber, int workerID) {
-        sendCellValueWhenUnlocked(task, cellNumber, workerID);
-    }
-
-    private void sendCellValueWhenUnlocked(Task task, int cellNumber, int workerID) {
-        new Thread(() -> {
-            try {
-                semaphores[cellNumber].acquire();
-                workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    public void unlockCell(Task task) {
-        ArrayList<Integer> unlocked = new ArrayList<>();
-        for (int cell: task.getInitialCells()) {
-            if (!unlocked.contains(cell)) {
-                semaphores[cell].release();
-                unlocked.add(cell);
-            }
+    private void removeWaitersWithTaskID(ArrayList<Waiter> list, int taskID) {
+        ArrayList<Waiter> shouldRemove = new ArrayList<>();
+        for (Waiter waiter: list) {
+            if(waiter.getTaskID() == taskID)
+                shouldRemove.add(waiter);
         }
+
+        for (Waiter waiter: shouldRemove) {
+            list.remove(waiter);
+        }
+    }
+
+    public synchronized void removeWaiters(Task task) {
+        for (int i = 0; i < waiters.length; i++)
+            removeWaitersWithTaskID(waiters[i], task.getId());
     }
 }

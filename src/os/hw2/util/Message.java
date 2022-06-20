@@ -6,10 +6,11 @@ public class Message {
     public static enum Type {
         ASSIGN,
         INTERRUPT,
-        CELLREQUEST,
-        CELLRESPONSE,
+        CELL_REQUEST,
+        CELL_RESPONSE,
         TASKBACK,
         UNLOCK,
+        REMOVE_WAITER,
         RESULT
     }
 

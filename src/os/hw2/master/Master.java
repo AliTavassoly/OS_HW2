@@ -180,6 +180,8 @@ public class Master {
         synchronized (tasks) {
             tasks.add(task);
         }
+        storageHandler.unlock(task);
+        storageHandler.removeFromWaiters(task);
     }
 
     public void shutDown() {

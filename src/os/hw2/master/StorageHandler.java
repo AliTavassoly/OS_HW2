@@ -93,4 +93,9 @@ public class StorageHandler {
             e.printStackTrace();
         }
     }
+
+    public void removeFromWaiters(Task task) {
+        Message message = new Message(Message.Type.REMOVE_WAITER, Message.Sender.MASTER, task);
+        sendMessage(message);
+    }
 }

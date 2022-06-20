@@ -68,7 +68,10 @@ public class MasterHandler {
     private void newMessageFromWorker(Message message) {
         switch (message.getType()) {
             case UNLOCK:
-                storage.unlockCell(message.getTask());
+                storage.unlockTask(message.getTask());
+                break;
+            case REMOVE_WAITER:
+                storage.removeWaiters(message.getTask());
                 break;
         }
     }

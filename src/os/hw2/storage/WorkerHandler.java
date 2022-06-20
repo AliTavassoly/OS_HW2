@@ -57,7 +57,7 @@ public class WorkerHandler {
     }
 
     public void sendCellValue(Integer cellValue) {
-        Message message = new Message(Message.Type.CELLRESPONSE, Message.Sender.STORAGE, cellValue, workerID);
+        Message message = new Message(Message.Type.CELL_RESPONSE, Message.Sender.STORAGE, cellValue, workerID);
         sendMessage(message);
     }
 
@@ -68,7 +68,7 @@ public class WorkerHandler {
 
     public void newMessageFromWorker(Message message) {
         switch (message.getType()) {
-            case CELLREQUEST:
+            case CELL_REQUEST:
                 storage.cellRequest(message.getTask(), message.getCellValue(), message.getWorkerID());
                 break;
         }

@@ -57,7 +57,7 @@ public class StorageHandler {
     }
 
     public void getCellValue(int cellNumber) {
-        Message message = new Message(Message.Type.CELLREQUEST, Message.Sender.WORKER, cellNumber, workerID);
+        Message message = new Message(Message.Type.CELL_REQUEST, Message.Sender.WORKER, cellNumber, workerID);
         sendMessageToStorage(message);
     }
 
@@ -68,7 +68,7 @@ public class StorageHandler {
 
     public void newMessageFromStorage(Message message) {
         switch (message.getType()) {
-            case CELLRESPONSE:
+            case CELL_RESPONSE:
                 worker.cellResponse(message);
                 break;
         }
