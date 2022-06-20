@@ -1,5 +1,6 @@
 package os.hw2.worker;
 
+import os.hw2.Task;
 import os.hw2.util.Message;
 import os.hw2.util.Logger;
 import os.hw2.util.MyGson;
@@ -56,8 +57,8 @@ public class StorageHandler {
         }).start();
     }
 
-    public void getCellValue(int cellNumber) {
-        Message message = new Message(Message.Type.CELL_REQUEST, Message.Sender.WORKER, cellNumber, workerID);
+    public void getCellValue(int cellNumber, Task task) {
+        Message message = new Message(Message.Type.CELL_REQUEST, Message.Sender.WORKER, task, cellNumber, workerID);
         sendMessageToStorage(message);
     }
 

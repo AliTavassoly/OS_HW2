@@ -108,7 +108,7 @@ public class Worker {
 
     private boolean requestForStorageCell(int cellNumber) {
         try {
-            storageHandler.getCellValue(cellNumber);
+            storageHandler.getCellValue(cellNumber, task);
             Logger.getInstance().log("Start waiting for cell " + cellNumber + " ...");
 
             synchronized (task) {

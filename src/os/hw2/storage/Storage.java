@@ -107,10 +107,12 @@ public class Storage {
     }
 
     public synchronized void unlockTask(Task task) {
+        Logger.getInstance().log("Unlock cells of " + task.getId());
         ArrayList<Integer> unlocked = new ArrayList<>();
         for (int cell: task.getInitialCells()) {
             if (!unlocked.contains(cell)) {
-                locks[task.getId()] = -1;
+                Logger.getInstance().log("Unlocking cell " + cell);
+                locks[cell] = -1;
                 unlockCell(cell);
                 unlocked.add(cell);
             }
