@@ -72,8 +72,6 @@ public class Message {
         return taskID;
     }
 
-    public Sender getSender() { return sender;}
-
     @Override
     public String toString() {
         return "Message{" +

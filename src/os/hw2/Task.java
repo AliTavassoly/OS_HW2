@@ -17,23 +17,6 @@ public class Task {
 
     private Type currentTask = Type.SLEEP;
 
-    public Task(ArrayList<Integer> arrayList, int id) {
-        this.cells = new ArrayList<>();
-        this.sleeps = new ArrayList<>();
-        this.id = id;
-
-        int isSleep = 1;
-        for (int i = 0; i < arrayList.size(); i++) {
-            if (isSleep == 1) {
-                sleeps.add((long) arrayList.get(i));
-            } else {
-                cells.add(arrayList.get(i));
-            }
-
-            isSleep = (isSleep + 1) % 2;
-        }
-    }
-
     public Task(int[] cellsAndSleeps, int id) {
         this.cells = new ArrayList<>();
         this.sleeps = new ArrayList<>();
