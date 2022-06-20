@@ -9,6 +9,7 @@ public class Message {
         CELLREQUEST,
         CELLRESPONSE,
         TASKBACK,
+        UNLOCK,
         RESULT
     }
 

@@ -1,13 +1,15 @@
 package os.hw2.storage;
 
+import os.hw2.Task;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 public class Storage {
-    private int storagePort, numberOfWorkers;
+    private int storagePort, numberOfWorkers, numberOfCells;
 
     private ServerSocket storageServerSocket;
 
@@ -16,6 +18,8 @@ public class Storage {
     private WorkerHandler[] workerHandlers;
 
     private ArrayList<Integer> memory;
+
+    private Semaphore[] semaphores;
 
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
@@ -29,14 +33,22 @@ public class Storage {
         try {
             storageServerSocket = new ServerSocket(storagePort);
 
-            masterHandler = new MasterHandler(storageServerSocket);
+            masterHandler = new MasterHandler(storageServerSocket, this);
 
-            masterHandler.initializeMemory(this.memory);
+            numberOfCells = masterHandler.initializeMemory(this.memory);
+
+            initializeSemaphores();
 
             waitForWorkersToConnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeSemaphores() {
+        semaphores = new Semaphore[numberOfCells];
+        for (int i = 0; i < numberOfCells; i++)
+            semaphores[i] = new Semaphore(1);
     }
 
     private void waitForWorkersToConnect() {
@@ -76,8 +88,28 @@ public class Storage {
         }
     }
 
-    public void cellRequest(int cellNumber, int workerID) {
-        // TODO: check if cell number is available
-        workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
+    public void cellRequest(Task task, int cellNumber, int workerID) {
+        sendCellValueWhenUnlocked(task, cellNumber, workerID);
+    }
+
+    private void sendCellValueWhenUnlocked(Task task, int cellNumber, int workerID) {
+        new Thread(() -> {
+            try {
+                semaphores[cellNumber].acquire();
+                workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void unlockCell(Task task) {
+        ArrayList<Integer> unlocked = new ArrayList<>();
+        for (int cell: task.getInitialCells()) {
+            if (!unlocked.contains(cell)) {
+                semaphores[cell].release();
+                unlocked.add(cell);
+            }
+        }
     }
 }

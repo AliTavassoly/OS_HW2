@@ -13,6 +13,8 @@ public class Task {
     private ArrayList<Integer> cells;
     private ArrayList<Long> sleeps;
 
+    private ArrayList<Integer> initialCells;
+
     private int id, sum = 0;
 
     private Type currentTask = Type.SLEEP;
@@ -32,6 +34,8 @@ public class Task {
 
             isSleep = (isSleep + 1) % 2;
         }
+
+        this.initialCells = new ArrayList<>(cells);
     }
 
     public ArrayList getCells() {
@@ -88,6 +92,10 @@ public class Task {
 
     public boolean isFinished() {
         return cells.size() == 0 && sleeps.size() == 0;
+    }
+
+    public ArrayList<Integer> getInitialCells() {
+        return this.initialCells;
     }
 
     @Override

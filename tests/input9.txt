@@ -1,0 +1,15 @@
+5
+C:\Users\Alico\.jdks\openjdk-15.0.2\bin\java.exe
+-javaagent:C:\Program Files\Jet\IntelliJ IDEA Community Edition 2021.1\lib\idea_rt.jar=2349:C:\Program Files\Jet\IntelliJ IDEA Community Edition 2021.1\bin
+-Dfile.encoding=UTF-8
+-classpath
+C:\Users\Alico\Desktop\OS_HW2\out\production\OS_HW2;C:\Users\Alico\Desktop\OS_HW2\lib\gson-2.9.0.jar
+8000
+2
+FCFS
+NONE
+8001
+1 2 3 0
+2
+50 0 50 1
+50 2 300 3 50 0 50 1 50

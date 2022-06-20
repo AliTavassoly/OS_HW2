@@ -69,7 +69,7 @@ public class WorkerHandler {
     public void newMessageFromWorker(Message message) {
         switch (message.getType()) {
             case CELLREQUEST:
-                storage.cellRequest(message.getCellValue(), message.getWorkerID());
+                storage.cellRequest(message.getTask(), message.getCellValue(), message.getWorkerID());
                 break;
         }
     }

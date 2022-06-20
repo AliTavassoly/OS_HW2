@@ -170,6 +170,7 @@ public class Master {
         remainsTasks--;
 
         System.out.println("Task " + task.getId() + " executed successfully with result " + task.getAns());
+        storageHandler.unlock(task);
 
         if (remainsTasks == 0)
             System.exit(0);

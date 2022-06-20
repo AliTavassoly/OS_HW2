@@ -1,6 +1,7 @@
 package os.hw2.master;
 
 import os.hw2.Main;
+import os.hw2.Task;
 import os.hw2.util.Message;
 import os.hw2.util.Logger;
 import os.hw2.util.MyGson;
@@ -35,9 +36,20 @@ public class StorageHandler {
             ).start();
 
             Logger.getInstance().log("Storage process created, PID: " + process.pid() + ", Port: " + storagePort);
+
+            startErrorListener();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void startErrorListener() {
+        new Thread(() -> {
+            Scanner scanner = new Scanner(process.getErrorStream());
+            while (true) {
+                System.out.println(scanner.nextLine());
+            }
+        }).start();
     }
 
     private void connectToStorage() {
@@ -63,9 +75,14 @@ public class StorageHandler {
         storagePrintStream.flush();
     }
 
-    public void sendMessageToWorker(Message message) {
+    public void sendMessage(Message message) {
         storagePrintStream.println(MyGson.getGson().toJson(message));
         storagePrintStream.flush();
+    }
+
+    public void unlock(Task task) {
+        Message message = new Message(Message.Type.UNLOCK, Message.Sender.MASTER, task);
+        sendMessage(message);
     }
 
     public void shutDown() {

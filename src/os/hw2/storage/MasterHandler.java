@@ -1,6 +1,8 @@
 package os.hw2.storage;
 
 import os.hw2.util.Logger;
+import os.hw2.util.Message;
+import os.hw2.util.MyGson;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,8 +16,11 @@ public class MasterHandler {
     private PrintStream masterPrintStream;
     private Scanner masterScanner;
 
-    public MasterHandler(ServerSocket storageServerSocket) {
+    private Storage storage;
+
+    public MasterHandler(ServerSocket storageServerSocket, Storage storage) {
         this.storageServerSocket = storageServerSocket;
+        this.storage = storage;
 
         connectToMaster();
     }
@@ -27,13 +32,15 @@ public class MasterHandler {
             masterScanner = new Scanner(socket.getInputStream());
 
             Logger.getInstance().log("Master connected to Storage");
+
+            listenToMaster();
         } catch (
         IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void initializeMemory(ArrayList<Integer> memory) {
+    public int initializeMemory(ArrayList<Integer> memory) {
         String memoryString = masterScanner.nextLine();
 
         String[] listOfData = memoryString.split(" ");
@@ -42,5 +49,27 @@ public class MasterHandler {
             memory.add(Integer.parseInt(listOfData[i]));
 
         Logger.getInstance().log("Memory initialized with: " + memory);
+
+        return memory.size();
+    }
+
+    private void listenToMaster() {
+        new Thread(() -> {
+            while (true) {
+                Message message = MyGson.getGson().fromJson(masterScanner.nextLine(), Message.class);
+
+                Logger.getInstance().log("New message from master: " + message);
+
+                newMessageFromWorker(message);
+            }
+        }).start();
+    }
+
+    private void newMessageFromWorker(Message message) {
+        switch (message.getType()) {
+            case UNLOCK:
+                storage.unlockCell(message.getTask());
+                break;
+        }
     }
 }
