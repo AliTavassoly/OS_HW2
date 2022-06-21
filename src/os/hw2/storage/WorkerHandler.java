@@ -57,7 +57,11 @@ public class WorkerHandler {
     }
 
     public void sendCellValue(Integer cellValue) {
-        Message message = new Message(Message.Type.CELL_RESPONSE, Message.Sender.STORAGE, cellValue, workerID);
+        Message message = new Message();
+        message.setType(Message.Type.CELL_RESPONSE);
+        message.setCellValue(cellValue);
+        message.setWorkerID(workerID);
+
         sendMessage(message);
     }
 

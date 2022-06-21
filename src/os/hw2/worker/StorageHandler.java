@@ -58,7 +58,12 @@ public class StorageHandler {
     }
 
     public void getCellValue(int cellNumber, Task task) {
-        Message message = new Message(Message.Type.CELL_REQUEST, Message.Sender.WORKER, task, cellNumber, workerID);
+        Message message = new Message();
+        message.setType(Message.Type.CELL_REQUEST);
+        message.setCellValue(cellNumber);
+        message.setTask(task);
+        message.setWorkerID(workerID);
+
         sendMessageToStorage(message);
     }
 

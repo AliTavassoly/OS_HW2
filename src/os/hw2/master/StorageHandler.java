@@ -81,7 +81,10 @@ public class StorageHandler {
     }
 
     public void unlock(Task task) {
-        Message message = new Message(Message.Type.UNLOCK, Message.Sender.MASTER, task);
+        Message message = new Message();
+        message.setType(Message.Type.UNLOCK);
+        message.setTask(task);
+
         sendMessage(message);
     }
 
@@ -95,7 +98,10 @@ public class StorageHandler {
     }
 
     public void removeFromWaiters(Task task) {
-        Message message = new Message(Message.Type.REMOVE_WAITER, Message.Sender.MASTER, task);
+        Message message = new Message();
+        message.setType(Message.Type.REMOVE_WAITER);
+        message.setTask(task);
+
         sendMessage(message);
     }
 }

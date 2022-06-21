@@ -90,7 +90,10 @@ public class WorkerHandler {
     public void runTask(Task task) {
         isBusy = true;
 
-        Message message = new Message(Message.Type.ASSIGN, Message.Sender.MASTER, task);
+        Message message = new Message();
+        message.setType(Message.Type.ASSIGN);
+        message.setTask(task);
+
         sendMessage(message);
     }
 
@@ -138,7 +141,10 @@ public class WorkerHandler {
     }
 
     public void interrupt(int taskID) {
-        Message message = new Message(Message.Type.INTERRUPT, Message.Sender.MASTER, taskID);
+        Message message = new Message();
+        message.setType(Message.Type.INTERRUPT);
+        message.setTaskID(taskID);
+
         sendMessage(message);
     }
 }

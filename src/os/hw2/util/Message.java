@@ -22,45 +22,10 @@ public class Message {
 
     private Type type;
     private Task task;
-    private Sender sender;
 
     private int taskID;
 
     private int cellValue, workerID;
-
-    public Message (Type type, Sender sender, int cellValue, int workerID) {
-        this.type = type;
-        this.sender = sender;
-        this.cellValue = cellValue;
-        this.workerID = workerID;
-    }
-
-    public Message (Type type, Sender sender, Task task, int cellValue, int workerID) {
-        this.type = type;
-        this.sender = sender;
-        this.task = task;
-        this.cellValue = cellValue;
-        this.workerID = workerID;
-    }
-
-    public Message (Type type, Sender sender, Task task, int workerID) {
-        this.type = type;
-        this.task = task;
-        this.sender = sender;
-        this.workerID = workerID;
-    }
-
-    public Message (Type type, Sender sender, Task task) {
-        this.type = type;
-        this.task = task;
-        this.sender = sender;
-    }
-
-    public Message (Type type, Sender sender, int taskID) {
-        this.type = type;
-        this.sender = sender;
-        this.taskID = taskID;
-    }
 
     public Task getTask() {
         return task;
@@ -82,12 +47,31 @@ public class Message {
         return taskID;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
+    }
+
+    public void setCellValue(int cellValue) {
+        this.cellValue = cellValue;
+    }
+
+    public void setWorkerID(int workerID) {
+        this.workerID = workerID;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "type=" + type +
                 ", task=" + task +
-                ", sender=" + sender +
                 ", taskID=" + taskID +
                 ", cellValue=" + cellValue +
                 ", workerID=" + workerID +

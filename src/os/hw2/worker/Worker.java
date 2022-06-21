@@ -128,12 +128,18 @@ public class Worker {
     }
 
     private void returnIncompleteTask() {
-        Message message = new Message(Message.Type.TASKBACK, Message.Sender.WORKER, this.task);
+        Message message = new Message();
+        message.setType(Message.Type.TASKBACK);
+        message.setTask(task);
+
         masterHandler.sendMessageToMaster(message);
     }
 
     private void returnTaskResult() {
-        Message message = new Message(Message.Type.RESULT, Message.Sender.WORKER, this.task);
+        Message message = new Message();
+        message.setType(Message.Type.RESULT);
+        message.setTask(task);
+
         masterHandler.sendMessageToMaster(message);
     }
 

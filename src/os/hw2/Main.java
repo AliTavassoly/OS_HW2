@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-    private static String inputFilePath = "tests/input11.txt";
+    private static String inputFilePath = "tests/input12.txt";
     private static Scanner inputScanner;
 
     public static int commonArgsNumber;
