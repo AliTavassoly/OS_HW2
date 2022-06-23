@@ -11,6 +11,7 @@ public class Message {
         TASKBACK,
         UNLOCK,
         REMOVE_WAITER,
+        DEADLOCK_STATE,
         RESULT
     }
 

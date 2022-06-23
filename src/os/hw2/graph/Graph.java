@@ -8,7 +8,7 @@ public class Graph {
 
     private ArrayList<Integer>[] adj;
 
-    private boolean hasCycle, white[], black[];
+    private boolean hasCycle, mark[];
 
     public Graph(int cellCount, int taskCount) {
         this.cellCount = cellCount;
@@ -29,53 +29,20 @@ public class Graph {
     }
 
     private void initializeMarks() {
-        white = new boolean[n];
-        black = new boolean[n];
-    }
-
-    public int getCellCount() {
-        return cellCount;
-    }
-
-    public void setCellCount(int cellCount) {
-        this.cellCount = cellCount;
-    }
-
-    public int getTaskCount() {
-        return taskCount;
-    }
-
-    public void setTaskCount(int taskCount) {
-        this.taskCount = taskCount;
+        mark = new boolean[n];
     }
 
     public void requestCell(int taskNumber, int cellNumber) {
         adj[taskNumber].add(taskCount + cellNumber);
     }
 
-    public void allocateCell(int taskNumber, int cellNumber) {
-        adj[taskCount + cellNumber].add(taskNumber);
+    public boolean canAssign(int taskNumber) {
+        return isInCycle(taskNumber);
     }
 
-    public boolean canAllocate(int taskNumber, int cellNumber) {
-        if (cellHasOutEdge(cellNumber)) // TODO: can be checked in storage
-            return false;
-        flipEdge(getTaskNumber(taskNumber), getCellNumber(cellNumber));
-        if (hasCycle()) {
-            flipEdge(getCellNumber(cellNumber), getTaskNumber(taskNumber));
-            return false;
-        }
-        flipEdge(getCellNumber(cellNumber), getTaskNumber(taskNumber));
-        return true;
-    }
-
-    private boolean cellHasOutEdge(int cellNumber) {
-        return adj[cellNumber].size() != 0;
-    }
-
-    public void flipEdge(int i, int j) {
-        adj[i].remove((Integer) j);
-        adj[j].add(i);
+    public void flipEdge(int taskNumber, int cellNumber) {
+        adj[getTaskNumber(taskNumber)].remove((Integer) getCellNumber(cellNumber));
+        adj[getCellNumber(cellNumber)].add(getTaskNumber(taskNumber));
     }
 
     private int getCellNumber(int cellNumber) {
@@ -86,32 +53,34 @@ public class Graph {
         return taskNumber;
     }
 
-    private void dfs(int v) {
-        white[v] = true;
-        black[v] = true;
-        for (int u: adj[v]) {
-            if (black[u])
-                hasCycle = true;
-            if (!white[u])
-                dfs(u);
+    public void removeEdges(int taskNumber) {
+        for (int i = taskCount; i < n; i++) {
+            adj[i].remove((Integer) getTaskNumber(taskNumber));
         }
-        black[v] = false;
+    }
+
+    private void dfs(int v, int target) {
+        mark[v] = true;
+        for (int u: adj[v]) {
+            if (!mark[u])
+                dfs(u, target);
+            else if(u == target) {
+                hasCycle = true;
+            }
+        }
     }
 
     private void clearMarks() {
         hasCycle = false;
         for (int i = 0; i < n; i++) {
-            white[i] = false;
-            black[i] = false;
+            mark[i] = false;
         }
     }
 
-    private boolean hasCycle() {
+    private boolean isInCycle(int taskNumber) {
         clearMarks();
 
-        for (int i = 0; i < n; i++)
-            if(!white[i])
-                dfs(i);
+        dfs(getTaskNumber(taskNumber), getTaskNumber(taskNumber));
 
         return hasCycle;
     }

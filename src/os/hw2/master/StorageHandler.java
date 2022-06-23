@@ -65,6 +65,8 @@ public class StorageHandler {
             storageScanner = new Scanner(storageSocket.getInputStream());
 
             sendInitialMemory();
+
+            sendDeadlock();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -72,6 +74,11 @@ public class StorageHandler {
 
     private void sendInitialMemory() {
         storagePrintStream.println(Main.memoryString);
+        storagePrintStream.flush();
+    }
+
+    private void sendDeadlock() {
+        storagePrintStream.println(MyGson.getGson().toJson(Main.deadlock));
         storagePrintStream.flush();
     }
 

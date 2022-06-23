@@ -1,5 +1,6 @@
 package os.hw2.storage;
 
+import os.hw2.Main;
 import os.hw2.util.Logger;
 import os.hw2.util.Message;
 import os.hw2.util.MyGson;
@@ -32,12 +33,14 @@ public class MasterHandler {
             masterScanner = new Scanner(socket.getInputStream());
 
             Logger.getInstance().log("Master connected to Storage");
-
-            listenToMaster();
         } catch (
         IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void start() {
+        listenToMaster();
     }
 
     public int initializeMemory(ArrayList<Integer> memory) {
@@ -51,6 +54,12 @@ public class MasterHandler {
         Logger.getInstance().log("Memory initialized with: " + memory);
 
         return memory.size();
+    }
+
+
+    public Main.Deadlock initializeDeadlock() {
+        Main.Deadlock deadlock = MyGson.getGson().fromJson(masterScanner.nextLine(), Main.Deadlock.class);
+        return deadlock;
     }
 
     private void listenToMaster() {

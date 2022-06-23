@@ -1,5 +1,6 @@
 package os.hw2.storage;
 
+import os.hw2.Main;
 import os.hw2.Task;
 import os.hw2.util.Logger;
 
@@ -22,6 +23,8 @@ public class Storage {
 
     private Integer[] locks;
 
+    private Main.Deadlock deadlock;
+
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
         this.numberOfWorkers = numberOfWorkers;
@@ -38,7 +41,13 @@ public class Storage {
 
             numberOfCells = masterHandler.initializeMemory(this.memory);
 
-            initializeSemaphores();
+            deadlock = masterHandler.initializeDeadlock();
+
+            masterHandler.start();
+
+            Logger.getInstance().log("Deadlock is: " + deadlock.toString());
+
+            initializeLocks();
 
             waitForWorkersToConnect();
         } catch (IOException e) {
@@ -46,7 +55,7 @@ public class Storage {
         }
     }
 
-    private void initializeSemaphores() {
+    private void initializeLocks() {
         waiters = new ArrayList[numberOfCells];
         locks = new Integer[numberOfCells];
 
@@ -75,7 +84,6 @@ public class Storage {
         logCreation();
 
         Logger.getInstance();
-//        MyGson.testGson();
 
         int port = Integer.parseInt(args[0]);
         int numberOfWorkers = Integer.parseInt(args[1]);
