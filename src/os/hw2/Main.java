@@ -2,13 +2,14 @@ package os.hw2;
 
 import os.hw2.master.Master;
 import os.hw2.util.Logger;
+import os.hw2.util.MyGson;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-    private static String inputFilePath = "tests/input12.txt";
+    private static String inputFilePath = "tests/input10.txt";
     private static Scanner inputScanner;
 
     public static int commonArgsNumber;
@@ -45,6 +46,8 @@ public class Main {
         Logger.processName = "Master";
         Logger.getInstance().clearFile();
         Logger.getInstance().log("Process start");
+
+        MyGson.testGson();
 
         input();
 

@@ -1,24 +1,16 @@
 package os.hw2.util;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class MyGson {
-    private static GsonBuilder gsonBuilder;
-    private static Gson gson;
+    private final static Gson gson = new Gson();
 
-    private static MyGson instance;
-
-    private MyGson() {
-        gsonBuilder = new GsonBuilder();
-        gson = gsonBuilder.create();
+    public static void testGson() {
+        Object obj = gson.fromJson("{}", Object.class);
+        Logger.getInstance().log("Gson Tested");
     }
 
     public static Gson getGson() {
-        if (instance == null) {
-            new MyGson();
-            return gson;
-        }
         return gson;
     }
 }

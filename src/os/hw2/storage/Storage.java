@@ -74,6 +74,9 @@ public class Storage {
         Logger.processName = "Storage";
         logCreation();
 
+        Logger.getInstance();
+//        MyGson.testGson();
+
         int port = Integer.parseInt(args[0]);
         int numberOfWorkers = Integer.parseInt(args[1]);
 

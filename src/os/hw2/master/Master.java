@@ -43,7 +43,7 @@ public class Master {
             workerHandlers.add(new WorkerHandler(Main.firstWorkerPort + i, this));
 
             try {
-                Thread.sleep(20);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -154,6 +154,8 @@ public class Master {
     }
 
     private int assignTask(int taskID) {
+
+
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {

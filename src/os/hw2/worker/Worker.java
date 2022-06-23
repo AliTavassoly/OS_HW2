@@ -3,6 +3,7 @@ package os.hw2.worker;
 import os.hw2.util.Message;
 import os.hw2.Task;
 import os.hw2.util.Logger;
+import os.hw2.util.MyGson;
 
 @SuppressWarnings("SynchronizeOnNonFinalField")
 public class Worker {
@@ -149,6 +150,9 @@ public class Worker {
         int id = Integer.parseInt(args[2]);
 
         Logger.processName = "Worker " + id;
+
+        Logger.getInstance();
+        MyGson.testGson();
 
         Worker worker = new Worker(workerPort, storagePort, id);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
