@@ -127,9 +127,11 @@ public class Storage {
     }
 
     private synchronized void sendCellValue(Task task, int cellNumber, int workerID) {
-        if(locks[cellNumber] == -1 || locks[cellNumber] == task.getId()) {
+        if(locks[cellNumber] == -1) {
             locks[cellNumber] = task.getId();
             graph.flipEdge(task.getId(), cellNumber);
+            workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
+        } else if(locks[cellNumber] == task.getId()) {
             workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
         } else {
             waiters[cellNumber].add(new Waiter(task.getId(), workerID));
