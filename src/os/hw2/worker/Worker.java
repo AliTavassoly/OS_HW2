@@ -116,8 +116,10 @@ public class Worker {
                 task.wait();
             }
 
-            if (this.cellValue == null)
+            if (this.cellValue == null) {
+                Logger.getInstance().log("Interrupted and did not get cell value");
                 return false;
+            }
 
             task.newCellValue(this.cellValue);
             Logger.getInstance().log("Got value of cell " + cellNumber + " ... is equal to: " + this.cellValue);
@@ -163,8 +165,10 @@ public class Worker {
     }
 
     public void interruptTask(int taskID) {
-        if (task.getId() == taskID) {
-            synchronized (task) {
+        Logger.getInstance().log("Interrupt received");
+        synchronized (task) {
+            if (task != null && task.getId() == taskID) {
+                Logger.getInstance().log("Interrupt received in sync");
                 task.notify();
             }
         }

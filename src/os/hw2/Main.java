@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-    private static String inputFilePath = "tests/input1.txt";
+    private static String inputFilePath = "tests/input14.txt";
     private static Scanner inputScanner;
 
     public static int commonArgsNumber;

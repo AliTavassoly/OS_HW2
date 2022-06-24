@@ -38,17 +38,19 @@ public class Graph {
     public void addEdge(int taskNumber, int cellNumber) {
         if (!adj[getTaskNumber(taskNumber)].contains(getCellNumber(cellNumber))) {
             adj[getTaskNumber(taskNumber)].add(getCellNumber(cellNumber));
-            Logger.getInstance().log("Add edge between task " + taskNumber + " and cell number " + cellNumber);
+            Logger.getInstance().log("Graph: Add edge between task " + taskNumber + " and cell number " + cellNumber + " " + this);
         }
     }
 
     public boolean canAssign(int taskNumber) {
-        return isInCycle(getTaskNumber(taskNumber));
+        return !isInCycle(getTaskNumber(taskNumber));
     }
 
     public void flipEdge(int taskNumber, int cellNumber) {
-        adj[getTaskNumber(taskNumber)].remove((Integer) getCellNumber(cellNumber));
+        adj[getTaskNumber(taskNumber)].remove(Integer.valueOf(getCellNumber(cellNumber)));
         adj[getCellNumber(cellNumber)].add(getTaskNumber(taskNumber));
+
+        Logger.getInstance().log("Graph: Flip edge between task: " + taskNumber + " and cell: " + cellNumber + " " + this);
     }
 
     private int getCellNumber(int cellNumber) {
@@ -61,8 +63,10 @@ public class Graph {
 
     public void removeEdges(int taskNumber) {
         for (int i = taskCount; i < n; i++) {
-            adj[i].remove((Integer) getTaskNumber(taskNumber));
+            adj[i].remove(Integer.valueOf(getTaskNumber(taskNumber)));
         }
+
+        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this);
     }
 
     private void dfs(int v, int target) {

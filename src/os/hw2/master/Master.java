@@ -4,11 +4,12 @@ import os.hw2.Main;
 import os.hw2.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Master {
-    private int masterPort;
+    private int masterPort, currentSJFTaskIndex = 0;
 
     private StorageHandler storageHandler;
 
@@ -17,6 +18,8 @@ public class Master {
     private List<Task> tasks;
 
     private int schedulerSleepTime, remainsTasks;
+
+    private boolean errorReported = false;
 
     public Master(int masterPort){
         this.masterPort = masterPort;
@@ -32,6 +35,12 @@ public class Master {
         for (int i = 0; i < Main.taskNumber; i++)
             tasks.add(Main.tasks[i]);
         remainsTasks = tasks.size();
+        sortTasksIfSJF();
+    }
+
+    private void sortTasksIfSJF() {
+        if (Main.scheduling == Main.Scheduling.SJF)
+            Collections.sort(tasks);
     }
 
     private void connectToStorage() {
@@ -107,14 +116,19 @@ public class Master {
     }
 
     private void assignTaskSJF() {
-        assignTask(findShortestTaskID());
+        int res = assignTask(findShortestTaskID());
+        if (res == -1) // If task can not be assigned because of deadlock
+            currentSJFTaskIndex = (currentSJFTaskIndex + 1) % tasks.size();
+        else // If task has assigned to some worker, set next task the shortest task
+            currentSJFTaskIndex = 0;
     }
 
     private void assignTaskRR() {
         synchronized (tasks) {
             Task task = tasks.get(0);
             int assignedWorkerID = assignTask(task.getId());
-            interrupter(task.getId(), assignedWorkerID);
+            if (assignedWorkerID != -1)
+                interrupter(task.getId(), assignedWorkerID);
         }
     }
 
@@ -131,13 +145,7 @@ public class Master {
 
     private int findShortestTaskID() {
         synchronized (tasks) {
-            Task chosenTask = null;
-            for (Task task : tasks) {
-                if (chosenTask == null || task.sumOfSleeps() < chosenTask.sumOfSleeps()) {
-                    chosenTask = task;
-                }
-            }
-            return chosenTask.getId();
+            return tasks.get(currentSJFTaskIndex).getId();
         }
     }
 
@@ -154,8 +162,29 @@ public class Master {
     }
 
     private int assignTask(int taskID) {
+        storageHandler.askTaskPermissionFromStorage(taskID);
 
+        boolean answer = storageHandler.getPermissionAnswer();
 
+        if (!answer) {
+            if (!errorReported) {
+                System.out.println("Deadlock detected");
+                errorReported = true;
+            }
+            switch (Main.scheduling) {
+                case RR:
+                case FCFS:
+                    synchronized (tasks) {
+                        tasks.add(tasks.remove(0));
+                    }
+                    break;
+                case SJF:
+                    break;
+            }
+            return -1;
+        }
+
+        // TODO: send task to the end of queue in FCFS and RR
         Task task = removeTask(taskID);
 
         for (WorkerHandler workerHandler: workerHandlers) {
@@ -165,7 +194,7 @@ public class Master {
             }
         }
         // This line should never be reached
-        return 0;
+        return -1;
     }
 
     public void taskResult(Task task) {

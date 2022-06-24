@@ -123,4 +123,17 @@ public class StorageHandler {
 
         sendMessage(message);
     }
+
+    public void askTaskPermissionFromStorage(int taskID) {
+        Message message = new Message();
+        message.setType(Message.Type.DEADLOCK_STATE);
+        message.setTaskID(taskID);
+        sendMessage(message);
+    }
+
+    public boolean getPermissionAnswer() {
+        Message message = MyGson.getGson().fromJson(storageScanner.nextLine(), Message.class);
+        Logger.getInstance().log("New message from storage " + message);
+        return message.getPermission();
+    }
 }

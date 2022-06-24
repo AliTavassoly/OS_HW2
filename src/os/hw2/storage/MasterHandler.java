@@ -83,6 +83,9 @@ public class MasterHandler {
             case REMOVE_WAITER:
                 storage.removeWaiters(message.getTask());
                 break;
+            case DEADLOCK_STATE:
+                storage.askPermission(message.getTaskID());
+                break;
         }
     }
 
@@ -93,5 +96,17 @@ public class MasterHandler {
         for (int i = 0; i < taskCount; i++) {
             storage.addTask(MyGson.getGson().fromJson(masterScanner.nextLine(), Task.class));
         }
+    }
+
+    private void sendMessage(Message message) {
+        masterPrintStream.println(MyGson.getGson().toJson(message, Message.class));
+        masterPrintStream.flush();
+    }
+
+    public void sendPermission(boolean permission) {
+        Message message = new Message();
+        message.setType(Message.Type.DEADLOCK_STATE);
+        message.setPermission(permission);
+        sendMessage(message);
     }
 }

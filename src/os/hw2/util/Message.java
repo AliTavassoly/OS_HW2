@@ -28,6 +28,8 @@ public class Message {
 
     private int cellValue, workerID;
 
+    private boolean permission;
+
     public Task getTask() {
         return task;
     }
@@ -68,6 +70,14 @@ public class Message {
         this.workerID = workerID;
     }
 
+    public void setPermission(boolean permission) {
+        this.permission = permission;
+    }
+
+    public boolean getPermission() {
+        return permission;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -76,6 +86,7 @@ public class Message {
                 ", taskID=" + taskID +
                 ", cellValue=" + cellValue +
                 ", workerID=" + workerID +
+                ", permission=" + permission +
                 '}';
     }
 }

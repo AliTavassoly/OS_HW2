@@ -109,7 +109,7 @@ public class WorkerHandler {
         workerPrintStream.println(MyGson.getGson().toJson(message));
         workerPrintStream.flush();
 
-        Logger.getInstance().log("Sending assign message to worker " + message.getTask());
+        Logger.getInstance().log("Sending message to worker " + message);
     }
 
     public void shutDown() {

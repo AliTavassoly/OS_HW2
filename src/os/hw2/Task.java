@@ -4,7 +4,7 @@ import os.hw2.util.Logger;
 
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements Comparable<Task>{
     public static enum Type {
         SLEEP,
         READ
@@ -106,5 +106,10 @@ public class Task {
                 ", id=" + id +
                 ", sum=" + sum +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        return (int) (sumOfSleeps() - o.sumOfSleeps());
     }
 }

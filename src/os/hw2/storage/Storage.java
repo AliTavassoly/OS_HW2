@@ -129,6 +129,7 @@ public class Storage {
     private synchronized void sendCellValue(Task task, int cellNumber, int workerID) {
         if(locks[cellNumber] == -1 || locks[cellNumber] == task.getId()) {
             locks[cellNumber] = task.getId();
+            graph.flipEdge(task.getId(), cellNumber);
             workerHandlers[workerID].sendCellValue(memory.get(cellNumber));
         } else {
             waiters[cellNumber].add(new Waiter(task.getId(), workerID));
@@ -139,6 +140,7 @@ public class Storage {
         if (waiters[cell].size() > 0) {
             Waiter waiter = waiters[cell].remove(0);
             locks[cell] = waiter.getTaskID();
+            graph.flipEdge(waiter.getTaskID(), cell);
             workerHandlers[waiter.getWorkerID()].sendCellValue(memory.get(cell));
         }
     }
@@ -154,6 +156,7 @@ public class Storage {
                 unlocked.add(cell);
             }
         }
+        graph.removeEdges(task.getId());
     }
 
     private void shutDown() {
@@ -183,5 +186,21 @@ public class Storage {
 
     public void addTask(Task task) {
         tasks.add(task);
+    }
+
+    public void askPermission(int taskID) {
+        boolean permission = false;
+        switch (deadlock) {
+            case PREVENT:
+                // TODO
+                break;
+            case NONE:
+                permission = true;
+                break;
+            case DETECT:
+                permission = graph.canAssign(taskID);
+                break;
+        }
+        masterHandler.sendPermission(permission);
     }
 }
