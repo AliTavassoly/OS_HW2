@@ -2,6 +2,7 @@ package os.hw2.storage;
 
 import os.hw2.Main;
 import os.hw2.Task;
+import os.hw2.util.Graph;
 import os.hw2.util.Logger;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Storage {
-    private int storagePort, numberOfWorkers, numberOfCells;
+    private int storagePort, numberOfWorkers, numberOfCells, taskCount;
 
     private ServerSocket storageServerSocket;
 
@@ -18,6 +19,7 @@ public class Storage {
     private WorkerHandler[] workerHandlers;
 
     private ArrayList<Integer> memory;
+    private ArrayList<Task> tasks;
 
     private ArrayList<Waiter> waiters[];
 
@@ -25,12 +27,15 @@ public class Storage {
 
     private Main.Deadlock deadlock;
 
+    private Graph graph;
+
     public Storage(int storagePort, int numberOfWorkers) {
         this.storagePort = storagePort;
         this.numberOfWorkers = numberOfWorkers;
         this.workerHandlers = new WorkerHandler[numberOfWorkers];
 
         memory = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
     public void start(){
@@ -42,6 +47,14 @@ public class Storage {
             numberOfCells = masterHandler.initializeMemory(this.memory);
 
             deadlock = masterHandler.initializeDeadlock();
+
+            masterHandler.receiveTasks();
+
+            graph = new Graph(numberOfCells, taskCount);
+
+            addInitialTasks();
+
+            Logger.getInstance().log("Graph with " + numberOfCells + " cells and " + taskCount + " task counts " + graph.toString());
 
             masterHandler.start();
 
@@ -55,6 +68,10 @@ public class Storage {
         }
     }
 
+    public void  setTaskCount(int taskCount){
+        this.taskCount = taskCount;
+    }
+
     private void initializeLocks() {
         waiters = new ArrayList[numberOfCells];
         locks = new Integer[numberOfCells];
@@ -63,6 +80,15 @@ public class Storage {
             waiters[i] = new ArrayList<Waiter>();
             locks[i] = -1;
         }
+    }
+
+    public void addInitialTasks() {
+        for (Task task: tasks) {
+            for (int cell : task.getInitialCells()) {
+                graph.addEdge(task.getId(), cell);
+            }
+        }
+        Logger.getInstance().log(String.valueOf(graph.getEdgeCount()));
     }
 
     private void waitForWorkersToConnect() {
@@ -153,5 +179,9 @@ public class Storage {
     public synchronized void removeWaiters(Task task) {
         for (int i = 0; i < waiters.length; i++)
             removeWaitersWithTaskID(waiters[i], task.getId());
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 }

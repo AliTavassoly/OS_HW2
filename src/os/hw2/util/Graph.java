@@ -1,6 +1,9 @@
-package os.hw2.graph;
+package os.hw2.util;
+
+import os.hw2.util.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Graph {
     private int n;
@@ -32,12 +35,15 @@ public class Graph {
         mark = new boolean[n];
     }
 
-    public void requestCell(int taskNumber, int cellNumber) {
-        adj[taskNumber].add(taskCount + cellNumber);
+    public void addEdge(int taskNumber, int cellNumber) {
+        if (!adj[getTaskNumber(taskNumber)].contains(getCellNumber(cellNumber))) {
+            adj[getTaskNumber(taskNumber)].add(getCellNumber(cellNumber));
+            Logger.getInstance().log("Add edge between task " + taskNumber + " and cell number " + cellNumber);
+        }
     }
 
     public boolean canAssign(int taskNumber) {
-        return isInCycle(taskNumber);
+        return isInCycle(getTaskNumber(taskNumber));
     }
 
     public void flipEdge(int taskNumber, int cellNumber) {
@@ -83,5 +89,24 @@ public class Graph {
         dfs(getTaskNumber(taskNumber), getTaskNumber(taskNumber));
 
         return hasCycle;
+    }
+
+    public int getEdgeCount() {
+        int ans = 0;
+        for (int i = 0; i < n; i++)
+            ans += adj[i].size();
+        return ans / 2;
+    }
+
+    @Override
+    public String toString() {
+        return "Graph{" +
+                "n=" + n +
+                ", cellCount=" + cellCount +
+                ", taskCount=" + taskCount +
+                ", adj=" + Arrays.toString(adj) +
+                ", hasCycle=" + hasCycle +
+                ", mark=" + Arrays.toString(mark) +
+                '}';
     }
 }

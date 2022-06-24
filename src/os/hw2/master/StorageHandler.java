@@ -67,6 +67,8 @@ public class StorageHandler {
             sendInitialMemory();
 
             sendDeadlock();
+
+            sendAllTasks();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -75,6 +77,16 @@ public class StorageHandler {
     private void sendInitialMemory() {
         storagePrintStream.println(Main.memoryString);
         storagePrintStream.flush();
+    }
+
+    private void sendAllTasks() {
+        storagePrintStream.println(Main.taskNumber);
+        storagePrintStream.flush();
+
+        for(int i = 0; i < Main.taskNumber; i++) {
+            storagePrintStream.println(MyGson.getGson().toJson(Main.tasks[i]));
+            storagePrintStream.flush();
+        }
     }
 
     private void sendDeadlock() {

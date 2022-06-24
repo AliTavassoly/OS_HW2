@@ -1,6 +1,7 @@
 package os.hw2.storage;
 
 import os.hw2.Main;
+import os.hw2.Task;
 import os.hw2.util.Logger;
 import os.hw2.util.Message;
 import os.hw2.util.MyGson;
@@ -82,6 +83,15 @@ public class MasterHandler {
             case REMOVE_WAITER:
                 storage.removeWaiters(message.getTask());
                 break;
+        }
+    }
+
+    public void receiveTasks() {
+        int taskCount = Integer.parseInt(masterScanner.nextLine());
+        storage.setTaskCount(taskCount);
+
+        for (int i = 0; i < taskCount; i++) {
+            storage.addTask(MyGson.getGson().fromJson(masterScanner.nextLine(), Task.class));
         }
     }
 }
