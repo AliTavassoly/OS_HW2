@@ -9,7 +9,7 @@ public class Logger {
 
     public static String processName;
 
-    public static boolean isDebug = false;
+    public static boolean isDebug = true;
 
     public static Logger getInstance(){
         if(instance == null)

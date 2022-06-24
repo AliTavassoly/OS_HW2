@@ -42,15 +42,21 @@ public class Graph {
         }
     }
 
-    public boolean canAssign(int taskNumber) {
+    public synchronized boolean canAssign(int taskNumber) {
         return !isInCycle(getTaskNumber(taskNumber));
     }
 
-    public void flipEdge(int taskNumber, int cellNumber) {
-        adj[getTaskNumber(taskNumber)].remove(Integer.valueOf(getCellNumber(cellNumber)));
+    public synchronized void flipEdge(int taskNumber, int cellNumber) {
+        Logger.getInstance().log("Graph: Before Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this);
+
+//        boolean remove = adj[getTaskNumber(taskNumber)].contains((Integer) (getCellNumber(cellNumber)));
+        boolean remove1 = adj[getTaskNumber(taskNumber)].remove(Integer.valueOf(getCellNumber(cellNumber)));
+
+        Logger.getInstance().log("Graph: Middle Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this + "result " + remove1);
+
         adj[getCellNumber(cellNumber)].add(getTaskNumber(taskNumber));
 
-        Logger.getInstance().log("Graph: Flip edge between task: " + taskNumber + " and cell: " + cellNumber + " " + this);
+        Logger.getInstance().log("Graph: After Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this);
     }
 
     private int getCellNumber(int cellNumber) {
@@ -61,12 +67,14 @@ public class Graph {
         return taskNumber;
     }
 
-    public void removeEdges(int taskNumber) {
+    public synchronized void removeEdges(int taskNumber) {
+        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this + " " + getTaskNumber(taskNumber));
+
         for (int i = taskCount; i < n; i++) {
-            adj[i].remove(Integer.valueOf(getTaskNumber(taskNumber)));
+            adj[i].remove((Integer)getTaskNumber(taskNumber));
         }
 
-        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this);
+        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this + " " + getTaskNumber(taskNumber));
     }
 
     private void dfs(int v, int target) {
@@ -100,6 +108,14 @@ public class Graph {
         for (int i = 0; i < n; i++)
             ans += adj[i].size();
         return ans / 2;
+    }
+
+    public boolean canPrevent(int taskID) {
+        for (int neighbour: adj[getTaskNumber(taskID)]) {
+            if (adj[neighbour].size() > 0)
+                return false;
+        }
+        return true;
     }
 
     @Override

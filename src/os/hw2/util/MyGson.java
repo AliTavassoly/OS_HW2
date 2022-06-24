@@ -7,7 +7,6 @@ public class MyGson {
 
     public static void testGson() {
         Object obj = gson.fromJson("{}", Object.class);
-        Logger.getInstance().log("Gson Tested");
     }
 
     public static Gson getGson() {

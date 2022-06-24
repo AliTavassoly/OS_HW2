@@ -188,11 +188,31 @@ public class Storage {
         tasks.add(task);
     }
 
+    private void lockInitialCellsOfTask(int taskID) {
+        Task task = getTask(taskID);
+
+        for (int cell: task.getInitialCells()) {
+            if (locks[cell] != taskID)
+                graph.flipEdge(taskID, cell);
+            locks[cell] = taskID;
+        }
+    }
+
+    private Task getTask(int taskID) {
+        for (Task task: tasks) {
+            if(task.getId() == taskID)
+                return task;
+        }
+        return null;
+    }
+
     public void askPermission(int taskID) {
         boolean permission = false;
         switch (deadlock) {
             case PREVENT:
-                // TODO
+                permission = graph.canPrevent(taskID);
+                if (permission)
+                    lockInitialCellsOfTask(taskID);
                 break;
             case NONE:
                 permission = true;
