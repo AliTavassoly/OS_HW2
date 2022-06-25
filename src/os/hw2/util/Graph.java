@@ -1,7 +1,5 @@
 package os.hw2.util;
 
-import os.hw2.util.Logger;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -38,7 +36,6 @@ public class Graph {
     public void addEdge(int taskNumber, int cellNumber) {
         if (!adj[getTaskNumber(taskNumber)].contains(getCellNumber(cellNumber))) {
             adj[getTaskNumber(taskNumber)].add(getCellNumber(cellNumber));
-            Logger.getInstance().log("Graph: Add edge between task " + taskNumber + " and cell number " + cellNumber + " " + this);
         }
     }
 
@@ -47,16 +44,8 @@ public class Graph {
     }
 
     public synchronized void flipEdge(int taskNumber, int cellNumber) {
-        Logger.getInstance().log("Graph: Before Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this);
-
-//        boolean remove = adj[getTaskNumber(taskNumber)].contains((Integer) (getCellNumber(cellNumber)));
-        boolean remove1 = adj[getTaskNumber(taskNumber)].remove(Integer.valueOf(getCellNumber(cellNumber)));
-
-        Logger.getInstance().log("Graph: Middle Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this + "result " + remove1);
-
+        adj[getTaskNumber(taskNumber)].remove(Integer.valueOf(getCellNumber(cellNumber)));
         adj[getCellNumber(cellNumber)].add(getTaskNumber(taskNumber));
-
-        Logger.getInstance().log("Graph: After Flip edge between task: " + getTaskNumber(taskNumber) + " and cell: " + getCellNumber(cellNumber) + " " + this);
     }
 
     private int getCellNumber(int cellNumber) {
@@ -68,13 +57,9 @@ public class Graph {
     }
 
     public synchronized void removeEdges(int taskNumber) {
-        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this + " " + getTaskNumber(taskNumber));
-
         for (int i = taskCount; i < n; i++) {
             adj[i].remove((Integer)getTaskNumber(taskNumber));
         }
-
-        Logger.getInstance().log("Graph: remove edges of task: " + taskNumber + " " + this + " " + getTaskNumber(taskNumber));
     }
 
     private void dfs(int v, int target) {

@@ -17,7 +17,8 @@ public class Master {
 
     private List<Task> tasks;
 
-    private int schedulerSleepTime, remainsTasks;
+    private final int schedulerSleepTime = 5;
+    private int remainsTasks;
 
     private boolean errorReported = false;
 
@@ -26,8 +27,6 @@ public class Master {
         workerHandlers = new LinkedList<>();
 
         initializeTasks();
-
-        schedulerSleepTime = 1;
     }
 
     private void initializeTasks() {

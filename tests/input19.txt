@@ -6,15 +6,12 @@ C:\Users\Alico\.jdks\openjdk-15.0.2\bin\java.exe
 C:\Users\Alico\Desktop\OS_HW2\out\production\OS_HW2;C:\Users\Alico\Desktop\OS_HW2\lib\gson-2.9.0.jar
 8000
 2
-RR
-100
-NONE
+SJF
+PREVENT
 8001
-0 1 2 3 4 5
-5
-10 4
-10 5
-50 0
-100 1 100 1 50 1
-50 0 100 0 50 0
-100 2 50 3 100
+1 2 3 0
+4
+100 0 100 1
+100 1 100 2
+200 2 200 3
+100 3

@@ -54,11 +54,7 @@ public class Storage {
 
             addInitialTasks();
 
-            Logger.getInstance().log("Graph with " + numberOfCells + " cells and " + taskCount + " task counts " + graph.toString());
-
             masterHandler.start();
-
-            Logger.getInstance().log("Deadlock is: " + deadlock.toString());
 
             initializeLocks();
 
@@ -88,7 +84,6 @@ public class Storage {
                 graph.addEdge(task.getId(), cell);
             }
         }
-        Logger.getInstance().log(String.valueOf(graph.getEdgeCount()));
     }
 
     private void waitForWorkersToConnect() {
