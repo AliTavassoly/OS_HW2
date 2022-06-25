@@ -17,7 +17,7 @@ public class Master {
 
     private List<Task> tasks;
 
-    private final int schedulerSleepTime = 5;
+    private final int schedulerSleepTime = 3;
     private int remainsTasks;
 
     private boolean errorReported = false;

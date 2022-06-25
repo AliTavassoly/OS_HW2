@@ -37,6 +37,7 @@ public class MasterHandler {
     }
 
     public void startListening() {
+        Logger.getInstance().log("Start listening to master");
         new Thread(() -> {
             while (true) {
                 Message message = MyGson.getGson().fromJson(masterScanner.nextLine(), Message.class);
@@ -48,7 +49,7 @@ public class MasterHandler {
         }).start();
     }
 
-    public void sendMessageToMaster(Message message) {
+    public void sendMessage(Message message) {
         masterPrintStream.println(MyGson.getGson().toJson(message, Message.class));
         masterPrintStream.flush();
     }
@@ -59,6 +60,12 @@ public class MasterHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void testConnection() {
+        Message message = new Message();
+        message.setType(Message.Type.TEST_CONNECTION);
+        sendMessage(message);
     }
 
     public void newMessageFromMaster(Message message) {
@@ -72,6 +79,10 @@ public class MasterHandler {
             case TASKBACK:
                 break;
             case RESULT:
+                break;
+            case TEST_CONNECTION:
+                Logger.getInstance().log("Connection tested");
+
                 break;
         }
     }

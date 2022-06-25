@@ -12,6 +12,7 @@ public class Message {
         UNLOCK,
         REMOVE_WAITER,
         DEADLOCK_STATE,
+        TEST_CONNECTION,
         RESULT
     }
 

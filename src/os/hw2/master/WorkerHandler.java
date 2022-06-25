@@ -33,6 +33,8 @@ public class WorkerHandler {
         connectToWorker();
 
         startListeningToWorker();
+
+        testConnection();
     }
 
     private void createWorkerProcess() {
@@ -87,6 +89,12 @@ public class WorkerHandler {
         }
     }
 
+    private void testConnection() {
+        Message message = new Message();
+        message.setType(Message.Type.TEST_CONNECTION);
+        sendMessage(message);
+    }
+
     public void runTask(Task task) {
         isBusy = true;
 
@@ -109,7 +117,7 @@ public class WorkerHandler {
         workerPrintStream.println(MyGson.getGson().toJson(message));
         workerPrintStream.flush();
 
-        Logger.getInstance().log("Sending message to worker " + message);
+        Logger.getInstance().log("Sending message to worker " + message + " " + MyGson.getGson().toJson(message));
     }
 
     public void shutDown() {

@@ -5,7 +5,6 @@ import os.hw2.Task;
 import os.hw2.util.Logger;
 import os.hw2.util.MyGson;
 
-@SuppressWarnings("SynchronizeOnNonFinalField")
 public class Worker {
     private int workerPort, storagePort;
 
@@ -133,7 +132,7 @@ public class Worker {
         message.setType(Message.Type.TASKBACK);
         message.setTask(task);
 
-        masterHandler.sendMessageToMaster(message);
+        masterHandler.sendMessage(message);
     }
 
     private void returnTaskResult() {
@@ -141,7 +140,7 @@ public class Worker {
         message.setType(Message.Type.RESULT);
         message.setTask(task);
 
-        masterHandler.sendMessageToMaster(message);
+        masterHandler.sendMessage(message);
     }
 
     public static void main(String[] args) {
